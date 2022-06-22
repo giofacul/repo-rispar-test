@@ -42,6 +42,20 @@ class SimulationValueSelected extends StatelessWidget {
                 ),
               ],
             ),
+
+            Row(
+              children: const [
+                Text(
+                  "Escolha o ",
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  "percentual de garantia",
+                  style: TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ],
         ),
       ),
