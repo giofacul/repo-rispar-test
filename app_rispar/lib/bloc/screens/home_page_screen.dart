@@ -1,5 +1,5 @@
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
-import 'package:app_rispar/bloc/screens/simulation_value_selected.dart';
+import 'package:app_rispar/bloc/screens/simulation_value_selected_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomePageScreen extends StatefulWidget {
@@ -10,6 +10,9 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
+  final _formKeyValue = GlobalKey<FormState>();
+  final text_ctrl = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,29 +68,43 @@ class _HomePageScreenState extends State<HomePageScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 80),
-                child: TextFormField(
-                  textAlign: TextAlign.center,
-                  keyboardType: TextInputType.numberWithOptions(),
-                  decoration: InputDecoration(
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
+                child: Form(
+                  key: _formKeyValue,
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Preencha o campo';
+                      } else if (double.parse(value) <= 500 ||
+                          double.parse(value) > 300000) {
+                        return 'Valor inválido';
+                      }
+                      return null;
+                    },
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      prefixStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold),
+                      prefixText: 'R\$ ',
+                      hintStyle:
+                          const TextStyle(fontSize: 18, color: Colors.grey),
+                      hintText: 'Digite o valor desejado',
                     ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).primaryColor),
-                    ),
-                    prefixStyle: TextStyle(
-                        color: Theme.of(context).primaryColor,
+                    style: TextStyle(
                         fontSize: 32,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold),
-                    prefixText: 'R\$ ',
-                    hintStyle: const TextStyle(fontSize: 18, color: Colors.grey),
-                    hintText: 'Digite o valor desejado',
+                    controller: text_ctrl,
                   ),
-                  style: TextStyle(
-                      fontSize: 32,
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold),
                 ),
               ),
               SizedBox(
@@ -102,10 +119,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SimulationValueSelected()));
+                    if (_formKeyValue.currentState!.validate()) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  SimulationValueSelectedScreen(
+                                    valueSolicited: text_ctrl.text,
+                                  )));
+                    }
                   },
                 ),
               )
