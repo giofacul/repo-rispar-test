@@ -1,3 +1,4 @@
+import 'package:app_rispar/bloc/screens/home_page_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -13,10 +14,9 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                height: 140,
-                width: MediaQuery.of(context).size.width * 1,
-                color: Colors.pink,
-              ),
+                  height: 300,
+                  width: MediaQuery.of(context).size.width * 1,
+                  child: Image.asset("images/rispar_login.png")),
               Padding(
                 padding: const EdgeInsets.all(24),
                 child: Column(
@@ -27,8 +27,8 @@ class LoginScreen extends StatelessWidget {
                         children: [
                           const Text(
                             "Simule ",
-                            style:
-                                TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 28, fontWeight: FontWeight.bold),
                           ),
                           Text(
                             "agora ",
@@ -60,37 +60,36 @@ class LoginScreen extends StatelessWidget {
                           ),
                           Text(
                             "nome completo?",
-                            style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ),
                     TextFormField(
                       textAlign: TextAlign.start,
-                      keyboardType: TextInputType.numberWithOptions(),
+                      keyboardType: TextInputType.name,
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide:
-                          BorderSide(color: Theme.of(context).primaryColor),
+                              BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         prefixStyle: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 28,
                             fontWeight: FontWeight.bold),
-                        hintStyle: const TextStyle(fontSize: 18, color: Colors.grey),
+                        hintStyle:
+                            const TextStyle(fontSize: 18, color: Colors.grey),
                         hintText: 'Nome Completo',
                       ),
                       style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 18,
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold),
                     ),
-
-
                     Padding(
                       padding: const EdgeInsets.only(top: 40),
                       child: Row(
@@ -101,36 +100,36 @@ class LoginScreen extends StatelessWidget {
                           ),
                           Text(
                             "e-mail?",
-                            style:
-                            TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                     ),
                     TextFormField(
                       textAlign: TextAlign.start,
-                      keyboardType: TextInputType.numberWithOptions(),
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(color: Colors.grey),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide:
-                          BorderSide(color: Theme.of(context).primaryColor),
+                              BorderSide(color: Theme.of(context).primaryColor),
                         ),
                         prefixStyle: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 28,
                             fontWeight: FontWeight.bold),
-                        hintStyle: const TextStyle(fontSize: 18, color: Colors.grey),
-                        hintText: 'Nome Completo',
+                        hintStyle:
+                            const TextStyle(fontSize: 18, color: Colors.grey),
+                        hintText: 'seuemail@email.com',
                       ),
                       style: TextStyle(
-                          fontSize: 32,
+                          fontSize: 18,
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold),
                     ),
-
                     Padding(
                       padding: const EdgeInsets.only(top: 32),
                       child: SizedBox(
@@ -138,13 +137,20 @@ class LoginScreen extends StatelessWidget {
                         height: 60,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).primaryColor, // Background color
+                            primary: Theme.of(context)
+                                .primaryColor, // Background color
                           ),
-                          onPressed: () {},
-                          child: Text(
+                          child: const Text(
                             "Continuar",
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
                           ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomePageScreen()));
+                          },
                         ),
                       ),
                     )

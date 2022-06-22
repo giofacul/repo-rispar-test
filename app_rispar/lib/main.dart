@@ -1,5 +1,6 @@
 import 'package:app_rispar/bloc/screens/home_page_screen.dart';
 import 'package:app_rispar/bloc/screens/login_screen.dart';
+import 'package:app_rispar/bloc/screens/simulation_value_selected.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         primaryColor: Color.fromARGB(255, 0, 145, 145)
       ),
-      home: const LoginScreen(),
+      home: const SimulationValueSelected(),
     );
   }
 }
