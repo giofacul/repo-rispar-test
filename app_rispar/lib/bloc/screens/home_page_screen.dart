@@ -11,74 +11,103 @@ class HomePageScreen extends StatefulWidget {
 class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Scaffold(
-        appBar: CustomTopAppBar(),
-        body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        appBar: CustomTopAppBar(valueProgressAppBar: 0.33),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+            child: Column(
               children: [
-                Text(
-                  "De quanto ",
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "De quanto ",
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const Text(
+                      "você precisa?",
+                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                    )
+                  ],
                 ),
-                const Text(
-                  "você precisa?",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: const [
+                      Text("Insira um valor entre ",
+                          style: TextStyle(
+                            fontSize: 18,
+                          )),
+                      Text("R\$500",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          )),
+                      Text(" a ",
+                          style: TextStyle(
+                            fontSize: 18,
+                          )),
+                      Text("R\$300.000",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          )),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 80),
+                  child: TextFormField(
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.numberWithOptions(),
+                    decoration: InputDecoration(
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      prefixStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold),
+                      prefixText: 'R\$ ',
+                      hintStyle: const TextStyle(fontSize: 18),
+                      hintText: 'Digite o valor desejado',
+                    ),
+                    style: TextStyle(
+                        fontSize: 32,
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 1,
+                  height: 60,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).primaryColor, // Background color
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      "Continuar",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                  ),
                 )
               ],
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Text("Insira um valor entre ",
-                    style: TextStyle(
-                      fontSize: 18,
-                    )),
-                Text("R\$500",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    )),
-                Text(" a ",
-                    style: TextStyle(
-                      fontSize: 18,
-                    )),
-                Text("R\$300.000",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    )),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-              child: TextFormField(
-                decoration: InputDecoration(
-                  enabledBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red),
-                  ),
-                  hintText: 'Digite o valor empréstimo. EX: 25.000',
-                ),
-              ),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Theme.of(context).primaryColor, // Background color
-              ),
-              onPressed: () {},
-              child: Text("Continuar"),
-            )
-          ],
+          ),
         ),
-      ),
-    );
+      );
   }
 }

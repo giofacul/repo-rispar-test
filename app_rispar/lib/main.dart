@@ -1,4 +1,5 @@
 import 'package:app_rispar/bloc/screens/home_page_screen.dart';
+import 'package:app_rispar/bloc/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,9 +17,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        primaryColor: Color.fromARGB(255, 0, 160, 160)
+        primaryColor: Color.fromARGB(255, 0, 145, 145)
       ),
-      home: const HomePageScreen(),
+      home: const LoginScreen(),
     );
   }
 }
