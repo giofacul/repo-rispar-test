@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:app_rispar/bloc/helpers/user_solicitation_helper.dart';
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/simulation_value_selected_screen.dart';
 import 'package:flutter/material.dart';
@@ -85,9 +83,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       return null;
                     },
                     textAlign: TextAlign.start,
-                    keyboardType: TextInputType.numberWithOptions(),
+                    keyboardType: const TextInputType.numberWithOptions(),
                     decoration: InputDecoration(
-                      enabledBorder: UnderlineInputBorder(
+                      enabledBorder: const UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey),
                       ),
                       focusedBorder: UnderlineInputBorder(
@@ -113,13 +111,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width * 1,
+                width: MediaQuery.of(context).size.width,
                 height: 60,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor, // Background color
+                    primary: enableButton() == true?Theme.of(context)
+                        .primaryColor.withOpacity(0.3):Theme.of(context)
+                        .primaryColor, // Background color
                   ),
-                  child: Text(
+                  child: const Text(
                     "Continuar",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
@@ -143,5 +143,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
         ),
       ),
     );
+  }
+  bool? enableButton() {
+    if(text_ctrl.text.isEmpty || double.parse(text_ctrl.text) <= 500 ||
+        double.parse(text_ctrl.text) > 300000){
+      return true;
+    }return false;
   }
 }

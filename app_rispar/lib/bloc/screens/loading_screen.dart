@@ -1,9 +1,23 @@
+import 'dart:async';
+
 import 'package:app_rispar/bloc/screens/simulation_result_screen.dart';
 import 'package:app_rispar/bloc/screens/utils/utils_image_rotate.dart';
 import 'package:flutter/material.dart';
 
-class LoadingScreen extends StatelessWidget {
+class LoadingScreen extends StatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LoadingScreen> createState() => _LoadingScreenState();
+}
+
+class _LoadingScreenState extends State<LoadingScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    startSplashScreenTimer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,32 +29,15 @@ class LoadingScreen extends StatelessWidget {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
           onPressed: () => Navigator.of(context).pop(),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.close, color: Theme.of(context).primaryColor),
-            onPressed: () {
-              // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              //   content: Text('Aguarde um momento...'),
-              // ));
 
-              //TODO REMOVER ACESSO A PAGINA
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const SimulationResultScreen()));
-
-            },
-          ),
-        ],
-      ),
+      ),),
       //TODO TIMER LOADING
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: const [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 12),
+            padding: EdgeInsets.symmetric(vertical: 12),
             child: UtilsImageRotate(),
           ),
           Text(
@@ -58,5 +55,16 @@ class LoadingScreen extends StatelessWidget {
         ],
       )),
     );
+  }
+  startSplashScreenTimer() async{
+    const Duration duration = Duration(seconds: 2);
+    return Timer(duration, navigationToNextPage);
+  }
+
+  void navigationToNextPage(){
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const SimulationResultScreen()));
   }
 }

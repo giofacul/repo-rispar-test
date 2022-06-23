@@ -9,6 +9,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+
+  TextEditingController nameCTL = TextEditingController();
+  TextEditingController emailCTL = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
   String? _name;
   String? _email;
@@ -22,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                   height: 300,
                   width: MediaQuery.of(context).size.width,
                   child: Image.asset("images/rispar_login.png")),
@@ -50,10 +54,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.only(top: 16),
                       child: Container(
                         alignment: Alignment.centerLeft,
-                        child: Text(
+                        child: const Text(
                           "Crédito rápido, fácil e seguro! :)",
                           style: TextStyle(fontSize: 16),
                         ),
@@ -81,10 +85,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: nameCTL,
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.name,
                             decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
+                              enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
                               focusedBorder: UnderlineInputBorder(
@@ -131,10 +136,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           TextFormField(
+                            controller: emailCTL,
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
-                              enabledBorder: UnderlineInputBorder(
+                              enabledBorder: const UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
                               focusedBorder: UnderlineInputBorder(
@@ -170,7 +176,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 60,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context)
+                            primary: enableButton() == true?Theme.of(context)
+                                .primaryColor.withOpacity(0.3):Theme.of(context)
                                 .primaryColor, // Background color
                           ),
                           child: const Text(
@@ -178,22 +185,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
-                          //TODO COLORIR BOTAO
                           onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('vslidou form')));
+                              if (_formKey.currentState!.validate()) {
                               //TODO SALVAR NOME E EMAIL NO SHARED PREFERENCES
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HomePageScreen()));
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('fora do form')));
-                            }
-                          },
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) =>
+                              const HomePageScreen()));
+                            }}
                         ),
                       ),
                     )
@@ -205,5 +205,10 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+  bool? enableButton() {
+    if(nameCTL.text.isEmpty || !nameCTL.text.contains(' ') || emailCTL.text.isEmpty || !emailCTL.text.contains('@')){
+      return true;
+    }return false;
   }
 }
