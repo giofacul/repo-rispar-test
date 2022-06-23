@@ -34,6 +34,7 @@ class LoadingScreen extends StatelessWidget {
           ),
         ],
       ),
+      //TODO TIMER LOADING
       body: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

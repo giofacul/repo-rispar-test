@@ -4,7 +4,6 @@ import 'package:app_rispar/bloc/helpers/user_solicitation_helper.dart';
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/simulation_value_selected_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class HomePageScreen extends StatefulWidget {
   const HomePageScreen({Key? key}) : super(key: key);
@@ -72,6 +71,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 80),
+                //TODO MASCARA TEXTFORMFIELD
                 child: Form(
                   key: _formKeyValue,
                   child: TextFormField(
@@ -84,7 +84,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       }
                       return null;
                     },
-                    textAlign: TextAlign.center,
+                    textAlign: TextAlign.start,
                     keyboardType: TextInputType.numberWithOptions(),
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
@@ -98,6 +98,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                           color: Theme.of(context).primaryColor,
                           fontSize: 32,
                           fontWeight: FontWeight.bold),
+                      //TODO CENTRALIZAR O HINT
                       prefixText: 'R\$ ',
                       hintStyle:
                           const TextStyle(fontSize: 18, color: Colors.grey),
@@ -122,15 +123,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     "Continuar",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
+                  //TODO COLORIR BOTAO
                   onPressed: () {
                     if (_formKeyValue.currentState!.validate()) {
-                      createSimulation;
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
                                   SimulationValueSelectedScreen(
-                                    valueSolicited: text_ctrl.text,
+                                    valueSolicited:
+                                        double.parse(text_ctrl.text),
                                   )));
                     }
                   },
@@ -141,29 +143,5 @@ class _HomePageScreenState extends State<HomePageScreen> {
         ),
       ),
     );
-  }
-
-  Future<UserSolicitation> createSimulation(String name, String email, int itv,
-      double amount, int term, bool has_protected_collateral) async {
-    final response = await http.post(
-      Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'name': name,
-        'email': email,
-        'itv': int,
-        'amount': amount,
-        'term': term,
-        'has_protected_collateral': has_protected_collateral
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      return UserSolicitation.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to create album.');
-    }
   }
 }

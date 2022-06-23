@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
   CustomTopAppBar({Key? key, required this.valueProgressAppBar}) : super(key: key);
 
+  //TODO APPBAR LOADING
   double valueProgressAppBar;
 
   @override

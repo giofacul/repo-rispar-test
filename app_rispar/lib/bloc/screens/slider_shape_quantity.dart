@@ -26,6 +26,16 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Slider(
+            value: indexSlider.toDouble(),
+            min: min,
+            max: max,
+            divisions: divisions,
+            label: labels[indexSlider],
+            onChanged: (value) =>
+                setState(() => this.indexSlider = value.toInt()),
+
+          ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
@@ -39,16 +49,6 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
 
                   return buildLabel(label: model.toString(), color: color, width: 30);
                 })),
-          ),
-          Slider(
-            value: indexSlider.toDouble(),
-            min: min,
-            max: max,
-            divisions: divisions,
-            label: labels[indexSlider],
-            onChanged: (value) =>
-                setState(() => this.indexSlider = value.toInt()),
-
           ),
         ],
       ),

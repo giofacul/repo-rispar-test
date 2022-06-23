@@ -1,11 +1,16 @@
+import 'dart:convert';
+
+import 'package:app_rispar/bloc/helpers/user_solicitation_helper.dart';
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/loading_screen.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_percent.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_quantity.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class SimulationValueSelectedScreen extends StatefulWidget {
-  final String? valueSolicited;
+  final double? valueSolicited;
+
   const SimulationValueSelectedScreen({Key? key, this.valueSolicited})
       : super(key: key);
 
@@ -16,12 +21,9 @@ class SimulationValueSelectedScreen extends StatefulWidget {
 
 class _SimulationValueSelectedScreenState
     extends State<SimulationValueSelectedScreen> {
-  int indexSlider = 0;
-
   @override
   Widget build(BuildContext context) {
-
-  return Scaffold(
+    return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomTopAppBar(valueProgressAppBar: 0.66),
       body: SingleChildScrollView(
@@ -39,7 +41,8 @@ class _SimulationValueSelectedScreenState
                 height: 12,
               ),
               Text(
-                'R\$ ${widget.valueSolicited}',
+                //TODO AJUSTAR AMOSTRA DE NUMERO
+                'R\$ ${widget.valueSolicited.toString()}',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -101,8 +104,11 @@ class _SimulationValueSelectedScreenState
                           fontSize: 18, color: Theme.of(context).primaryColor),
                     ),
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Não sei oq faz kk')));
+                      createSimulation(hasProtectedCollateral: false);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoadingScreen()));
                     },
                   ),
                 ),
@@ -119,6 +125,15 @@ class _SimulationValueSelectedScreenState
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   onPressed: () {
+                    createSimulation(
+                        name: 'shared pref',
+                        email: 'shared pref',
+                        //
+                        itv: 2121,
+                        //valor escolhido
+                        amount: widget.valueSolicited,
+                        term: 21,
+                        hasProtectedCollateral: true);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -131,5 +146,34 @@ class _SimulationValueSelectedScreenState
         ),
       ),
     );
+  }
+
+  Future<UserSolicitation> createSimulation(
+      {String? name,
+      String? email,
+      int? itv,
+      double? amount,
+      int? term,
+      bool? hasProtectedCollateral}) async {
+    final response = await http.post(
+      Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': name,
+        'email': email,
+        'itv': int,
+        'amount': amount,
+        'term': term,
+        'has_protected_collateral': hasProtectedCollateral
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return UserSolicitation.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to create album.');
+    }
   }
 }

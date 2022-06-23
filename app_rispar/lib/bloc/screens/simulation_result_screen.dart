@@ -10,6 +10,7 @@ class SimulationResultScreen extends StatefulWidget {
 }
 
 class _SimulationResultScreenState extends State<SimulationResultScreen> {
+  //TODO TRAZER DADOS DE RETORNO DA API
   @override
   Widget build(BuildContext context) {
     return Scaffold(

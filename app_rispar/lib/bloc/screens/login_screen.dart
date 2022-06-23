@@ -9,7 +9,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState>? _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   String? _name;
   String? _email;
 
@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               Container(
                   height: 300,
-                  width: MediaQuery.of(context).size.width * 1,
+                  width: MediaQuery.of(context).size.width,
                   child: Image.asset("images/rispar_login.png")),
               Padding(
                 padding: const EdgeInsets.all(24),
@@ -99,15 +99,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontSize: 18, color: Colors.grey),
                               hintText: 'Nome Completo',
                             ),
+                            // validator: (value) {
+                            //   value!.isEmpty ? 'Preencha o nome' : null;
+                            // },
                             validator: (value) {
-                              value!.isEmpty || value == null ?
-                                'Preencha o nome'
-                              : null;
+                              if (value!.isEmpty || !value.contains(' ')) {
+                                return 'Preencha o nome';
+                              }
+                              return null;
                             },
                             style: TextStyle(
-                                fontSize: 18,
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(top: 40),
@@ -146,14 +150,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               hintText: 'seuemail@email.com',
                             ),
                             validator: (value) {
-                              value!.isEmpty || !value.contains("@")
-                                  ?  'E-mail'
-                                  : null;
-                            }, 
+                              if (value!.isEmpty || !value.contains('@')) {
+                                return 'Preencha o email';
+                              }
+                              return null;
+                            },
                             style: TextStyle(
-                                fontSize: 18,
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold),
+                              fontSize: 18,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                         ],
                       ),
@@ -173,9 +178,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
+                          //TODO COLORIR BOTAO
                           onPressed: () {
-                            final FormState? form = _formKey?.currentState?.validate() as FormState?;
-                            if (form!.validate()) {
+                            if (_formKey.currentState!.validate()) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('vslidou form')));
                               //TODO SALVAR NOME E EMAIL NO SHARED PREFERENCES
                               Navigator.push(
                                   context,
@@ -183,7 +190,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       builder: (context) =>
                                           const HomePageScreen()));
                             } else {
-                              print('Form is invalid');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('fora do form')));
                             }
                           },
                         ),

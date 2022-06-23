@@ -26,6 +26,16 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Slider(
+            value: indexSlider.toDouble(),
+            min: min,
+            max: max,
+            divisions: divisions,
+            label: labels[indexSlider],
+            onChanged: (value) =>
+                setState(() => this.indexSlider = value.toInt()),
+
+          ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
@@ -39,16 +49,6 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
 
                   return buildLabel(label: model.toString(), color: color, width: 40);
                 })),
-          ),
-          Slider(
-            value: indexSlider.toDouble(),
-            min: min,
-            max: max,
-            divisions: divisions,
-            label: labels[indexSlider],
-            onChanged: (value) =>
-                setState(() => this.indexSlider = value.toInt()),
-
           ),
         ],
       ),
