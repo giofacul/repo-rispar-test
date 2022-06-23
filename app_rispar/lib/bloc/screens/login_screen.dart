@@ -1,12 +1,20 @@
 import 'package:app_rispar/bloc/screens/home_page_screen.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  State<LoginScreen> createState() => _LoginScreenState();
+}
 
+class _LoginScreenState extends State<LoginScreen> {
+  final GlobalKey<FormState>? _formKey = GlobalKey<FormState>();
+  String? _name;
+  String? _email;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Scaffold(
@@ -51,85 +59,104 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: Row(
-                        children: const [
-                          Text(
-                            "Qual seu ",
-                            style: TextStyle(fontSize: 20),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Row(
+                              children: const [
+                                Text(
+                                  "Qual seu ",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  "nome completo?",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
                           ),
-                          Text(
-                            "nome completo?",
+                          TextFormField(
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.name,
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              prefixStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold),
+                              hintStyle: const TextStyle(
+                                  fontSize: 18, color: Colors.grey),
+                              hintText: 'Nome Completo',
+                            ),
+                            validator: (value) {
+                              value!.isEmpty || value == null ?
+                                'Preencha o nome'
+                              : null;
+                            },
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Row(
+                              children: const [
+                                Text(
+                                  "E seu ",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                Text(
+                                  "e-mail?",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                          TextFormField(
+                            textAlign: TextAlign.start,
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.grey),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context).primaryColor),
+                              ),
+                              prefixStyle: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold),
+                              hintStyle: const TextStyle(
+                                  fontSize: 18, color: Colors.grey),
+                              hintText: 'seuemail@email.com',
+                            ),
+                            validator: (value) {
+                              value!.isEmpty || !value.contains("@")
+                                  ?  'E-mail'
+                                  : null;
+                            }, 
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                    ),
-                    TextFormField(
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
-                        ),
-                        prefixStyle: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold),
-                        hintStyle:
-                            const TextStyle(fontSize: 18, color: Colors.grey),
-                        hintText: 'Nome Completo',
-                      ),
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: Row(
-                        children: const [
-                          Text(
-                            "E seu ",
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          Text(
-                            "e-mail?",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    ),
-                    TextFormField(
-                      textAlign: TextAlign.start,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide:
-                              BorderSide(color: Theme.of(context).primaryColor),
-                        ),
-                        prefixStyle: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold),
-                        hintStyle:
-                            const TextStyle(fontSize: 18, color: Colors.grey),
-                        hintText: 'seuemail@email.com',
-                      ),
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Theme.of(context).primaryColor,
-                          fontWeight: FontWeight.bold),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 32),
@@ -147,12 +174,17 @@ class LoginScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           onPressed: () {
-                            // if(_formKeyValue.currentState!.validate()){
+                            final FormState? form = _formKey?.currentState?.validate() as FormState?;
+                            if (form!.validate()) {
+                              //TODO SALVAR NOME E EMAIL NO SHARED PREFERENCES
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => const HomePageScreen()));
-                            // }
+                                      builder: (context) =>
+                                          const HomePageScreen()));
+                            } else {
+                              print('Form is invalid');
+                            }
                           },
                         ),
                       ),
