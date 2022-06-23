@@ -6,7 +6,6 @@ import 'package:app_rispar/bloc/screens/loading_screen.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_percent.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_quantity.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class SimulationValueSelectedScreen extends StatefulWidget {
   final double? valueSolicited;
@@ -25,7 +24,8 @@ class _SimulationValueSelectedScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomTopAppBar(valueProgressAppBar: 0.66),
+      appBar: CustomTopAppBar(
+          valueProgressAppBar: 0.6, navigatorBackScreen: '/home_screen'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(24),

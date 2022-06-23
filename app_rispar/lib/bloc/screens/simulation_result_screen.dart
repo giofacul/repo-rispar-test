@@ -1,5 +1,5 @@
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
-import 'package:app_rispar/bloc/screens/home_page_screen.dart';
+import 'package:app_rispar/bloc/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class SimulationResultScreen extends StatefulWidget {
@@ -17,6 +17,7 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
       backgroundColor: Colors.white,
       appBar: CustomTopAppBar(
         valueProgressAppBar: 1,
+        isResultPageReturn: true,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -246,7 +247,7 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomePageScreen()));
+                                  builder: (context) => const HomeScreen()));
                         },
                       ),
                     ),

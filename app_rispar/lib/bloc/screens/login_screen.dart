@@ -1,4 +1,4 @@
-import 'package:app_rispar/bloc/screens/home_page_screen.dart';
+import 'package:app_rispar/bloc/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,7 +9,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-
   TextEditingController nameCTL = TextEditingController();
   TextEditingController emailCTL = TextEditingController();
 
@@ -104,9 +103,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontSize: 18, color: Colors.grey),
                               hintText: 'Nome Completo',
                             ),
-                            // validator: (value) {
-                            //   value!.isEmpty ? 'Preencha o nome' : null;
-                            // },
                             validator: (value) {
                               if (value!.isEmpty || !value.contains(' ')) {
                                 return 'Preencha o nome';
@@ -175,26 +171,26 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: MediaQuery.of(context).size.width * 1,
                         height: 60,
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: enableButton() == true?Theme.of(context)
-                                .primaryColor.withOpacity(0.3):Theme.of(context)
-                                .primaryColor, // Background color
-                          ),
-                          child: const Text(
-                            "Continuar",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 16),
-                          ),
-                          onPressed: () {
+                            style: ElevatedButton.styleFrom(
+                              primary: enableButton() == true
+                                  ? Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.3)
+                                  : Theme.of(context)
+                                      .primaryColor, // Background color
+                            ),
+                            child: const Text(
+                              "Continuar",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                              //TODO SALVAR NOME E EMAIL NO SHARED PREFERENCES
-                              Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                              builder: (context) =>
-                              const HomePageScreen()));
-                            }}
-                        ),
+                                //TODO SALVAR NOME E EMAIL NO SHARED PREFERENCES
+
+                                Navigator.pushNamed(context, '/home_screen');
+                              }
+                            }),
                       ),
                     )
                   ],
@@ -206,9 +202,14 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   bool? enableButton() {
-    if(nameCTL.text.isEmpty || !nameCTL.text.contains(' ') || emailCTL.text.isEmpty || !emailCTL.text.contains('@')){
+    if (nameCTL.text.isEmpty ||
+        !nameCTL.text.contains(' ') ||
+        emailCTL.text.isEmpty ||
+        !emailCTL.text.contains('@')) {
       return true;
-    }return false;
+    }
+    return false;
   }
 }

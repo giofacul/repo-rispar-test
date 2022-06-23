@@ -1,10 +1,14 @@
+import 'package:app_rispar/bloc/screens/simulation_value_selected_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
-  CustomTopAppBar({Key? key, required this.valueProgressAppBar}) : super(key: key);
+  final double valueProgressAppBar;
+  final bool? isResultPageReturn;
+  final String? navigatorBackScreen;
 
-  //TODO APPBAR LOADING
-  double valueProgressAppBar;
+  CustomTopAppBar(
+      {Key? key, required this.valueProgressAppBar, this.isResultPageReturn, this.navigatorBackScreen})
+      : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(50);
@@ -14,7 +18,6 @@ class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomTopAppBarState extends State<CustomTopAppBar> {
-  double? valueProgressAppBar;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +29,16 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
             elevation: 0,
             leading: IconButton(
               icon:
-                  Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
-              onPressed: () => Navigator.of(context).pop(),
+              //TODO RETORNAR DADOS DO SHARED P/ LOGIN QUANDO FAZER LOGOF NO VOLTAR
+              //TODO INSERIR MODAL PARA FAZER LOGOFF NA SETA
+              Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
+              onPressed: () {
+                if (widget.isResultPageReturn == true) {
+                  Navigator.pushNamed(context, '/simulation_value');
+                } else {
+                  Navigator.pushNamed(context, widget.navigatorBackScreen!);
+                }
+              },
             ),
             title: Padding(
               padding: const EdgeInsets.only(left: 10, right: 30),
@@ -35,7 +46,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
                 borderRadius: BorderRadius.circular(8),
                 child: LinearProgressIndicator(
                   minHeight: 6,
-                  value: valueProgressAppBar,
+                  value: widget.valueProgressAppBar,
                   color: Theme.of(context).primaryColor,
                   backgroundColor: Colors.grey,
                 ),

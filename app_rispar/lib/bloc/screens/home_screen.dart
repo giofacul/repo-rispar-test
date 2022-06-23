@@ -3,14 +3,14 @@ import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/simulation_value_selected_screen.dart';
 import 'package:flutter/material.dart';
 
-class HomePageScreen extends StatefulWidget {
-  const HomePageScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomePageScreen> createState() => _HomePageScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageScreenState extends State<HomePageScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final _formKeyValue = GlobalKey<FormState>();
   final text_ctrl = TextEditingController();
 
@@ -19,7 +19,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      appBar: CustomTopAppBar(valueProgressAppBar: 0.33),
+      appBar: CustomTopAppBar(valueProgressAppBar: 0.33, navigatorBackScreen: '/login_screen'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
