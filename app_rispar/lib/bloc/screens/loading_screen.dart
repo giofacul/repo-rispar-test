@@ -29,8 +29,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
           onPressed: () => Navigator.of(context).pop(),
-
-      ),),
+      ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.close, color: Theme.of(context).primaryColor),
+            onPressed: () => [Navigator.of(context).pop()],
+          ),
+        ],
+      ),
       //TODO TIMER LOADING
       body: Center(
           child: Column(

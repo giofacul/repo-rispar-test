@@ -1,4 +1,3 @@
-import 'package:app_rispar/bloc/screens/simulation_value_selected_screen.dart';
 import 'package:flutter/material.dart';
 
 class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {

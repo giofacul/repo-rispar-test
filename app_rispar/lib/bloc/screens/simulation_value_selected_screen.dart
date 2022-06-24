@@ -32,12 +32,11 @@ class _SimulationValueSelectedScreenState
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                textAlign: TextAlign.start,
+              const Text(
                 'Valor escolhido',
                 style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               Text(
@@ -62,8 +61,8 @@ class _SimulationValueSelectedScreenState
                   ),
                 ],
               ),
-              SizedBox(height: 80, child: SliderShapeQuantity()),
-              SizedBox(height: 24),
+              const SizedBox(height: 80, child: SliderShapeQuantity()),
+              const SizedBox(height: 24),
               Row(
                 children: const [
                   Text(
@@ -76,8 +75,8 @@ class _SimulationValueSelectedScreenState
                   ),
                 ],
               ),
-              Container(height: 80, child: SliderShapePercent()),
-              SizedBox(height: 24),
+              const SizedBox(height: 80, child: SliderShapePercent()),
+              const SizedBox(height: 24),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 child: Text(
@@ -104,7 +103,7 @@ class _SimulationValueSelectedScreenState
                           fontSize: 18, color: Theme.of(context).primaryColor),
                     ),
                     onPressed: () {
-                      createSimulation(hasProtectedCollateral: false);
+                      // createSimulation(hasProtectedCollateral: false);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -120,20 +119,20 @@ class _SimulationValueSelectedScreenState
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor, // Background color
                   ),
-                  child: Text(
+                  child: const Text(
                     "Adicionar garantia",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   onPressed: () {
-                    createSimulation(
-                        name: 'shared pref',
-                        email: 'shared pref',
-                        //
-                        itv: 2121,
-                        //valor escolhido
-                        amount: widget.valueSolicited,
-                        term: 21,
-                        hasProtectedCollateral: true);
+                    // createSimulation(
+                    //     name: 'shared pref',
+                    //     email: 'shared pref',
+                    //     //
+                    //     itv: 2121,
+                    //     //valor escolhido
+                    //     amount: widget.valueSolicited,
+                    //     term: 21,
+                    //     hasProtectedCollateral: true);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -148,32 +147,32 @@ class _SimulationValueSelectedScreenState
     );
   }
 
-  Future<UserSolicitation> createSimulation(
-      {String? name,
-      String? email,
-      int? itv,
-      double? amount,
-      int? term,
-      bool? hasProtectedCollateral}) async {
-    final response = await http.post(
-      Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'name': name,
-        'email': email,
-        'itv': int,
-        'amount': amount,
-        'term': term,
-        'has_protected_collateral': hasProtectedCollateral
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      return UserSolicitation.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to create album.');
-    }
-  }
+  // Future<UserSolicitation> createSimulation(
+  //     {String? name,
+  //     String? email,
+  //     int? itv,
+  //     double? amount,
+  //     int? term,
+  //     bool? hasProtectedCollateral,}) async {
+  //   final response = await http.post(
+  //     Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
+  //     headers: <String, String>{
+  //       'Content-Type': 'application/json; charset=UTF-8',
+  //     },
+  //     body: jsonEncode(<String, dynamic>{
+  //       'name': name,
+  //       'email': email,
+  //       'itv': int,
+  //       'amount': amount,
+  //       'term': term,
+  //       'has_protected_collateral': hasProtectedCollateral
+  //     }),
+  //   );
+  //
+  //   if (response.statusCode == 201) {
+  //     return UserSolicitation.fromJson(jsonDecode(response.body));
+  //   } else {
+  //     throw Exception('Failed to create album.');
+  //   }
+  // }
 }

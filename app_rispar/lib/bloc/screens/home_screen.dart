@@ -11,8 +11,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  TextEditingController textCtrl = TextEditingController();
   final _formKeyValue = GlobalKey<FormState>();
-  final text_ctrl = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: 32,
                         color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.bold),
-                    controller: text_ctrl,
+                    controller: textCtrl,
                   ),
                 ),
               ),
@@ -132,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               builder: (context) =>
                                   SimulationValueSelectedScreen(
                                     valueSolicited:
-                                        double.parse(text_ctrl.text),
+                                        double.parse(textCtrl.text),
                                   )));
                     }
                   },
@@ -145,8 +147,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   bool? enableButton() {
-    if(text_ctrl.text.isEmpty || double.parse(text_ctrl.text) <= 500 ||
-        double.parse(text_ctrl.text) > 300000){
+    if(textCtrl.text.isEmpty || double.parse(textCtrl.text) <= 500 ||
+        double.parse(textCtrl.text) > 300000){
       return true;
     }return false;
   }
