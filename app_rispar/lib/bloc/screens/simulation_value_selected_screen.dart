@@ -6,12 +6,11 @@ import 'package:app_rispar/bloc/screens/loading_screen.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_percent.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_quantity.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class SimulationValueSelectedScreen extends StatefulWidget {
-  final double? valueSolicited;
-
-  const SimulationValueSelectedScreen({Key? key, this.valueSolicited})
-      : super(key: key);
+  const SimulationValueSelectedScreen({Key? key}) : super(key: key);
 
   @override
   State<SimulationValueSelectedScreen> createState() =>
@@ -20,8 +19,20 @@ class SimulationValueSelectedScreen extends StatefulWidget {
 
 class _SimulationValueSelectedScreenState
     extends State<SimulationValueSelectedScreen> {
+  String? nameUserData;
+  String? emailUserData;
+  double? valueUserData;
+
+
+  @override
+  void initState() {
+    super.initState();
+    getDataUserToSimulation();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print('RETORNO DO VALOR NO BUILD ${valueUserData.toString()}');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomTopAppBar(
@@ -41,7 +52,7 @@ class _SimulationValueSelectedScreenState
               ),
               Text(
                 //TODO AJUSTAR AMOSTRA DE NUMERO
-                'R\$ ${widget.valueSolicited.toString()}',
+                'R\$ ${valueUserData.toString()}',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -103,7 +114,7 @@ class _SimulationValueSelectedScreenState
                           fontSize: 18, color: Theme.of(context).primaryColor),
                     ),
                     onPressed: () {
-                      // createSimulation(hasProtectedCollateral: false);
+                      simulationProtectedCollateral(false);
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -124,19 +135,12 @@ class _SimulationValueSelectedScreenState
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   onPressed: () {
-                    // createSimulation(
-                    //     name: 'shared pref',
-                    //     email: 'shared pref',
-                    //     //
-                    //     itv: 2121,
-                    //     //valor escolhido
-                    //     amount: widget.valueSolicited,
-                    //     term: 21,
-                    //     hasProtectedCollateral: true);
+                    simulationProtectedCollateral(true);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const LoadingScreen()));
+
                   },
                 ),
               )
@@ -147,32 +151,65 @@ class _SimulationValueSelectedScreenState
     );
   }
 
-  // Future<UserSolicitation> createSimulation(
-  //     {String? name,
-  //     String? email,
-  //     int? itv,
-  //     double? amount,
-  //     int? term,
-  //     bool? hasProtectedCollateral,}) async {
-  //   final response = await http.post(
-  //     Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(<String, dynamic>{
-  //       'name': name,
-  //       'email': email,
-  //       'itv': int,
-  //       'amount': amount,
-  //       'term': term,
-  //       'has_protected_collateral': hasProtectedCollateral
-  //     }),
-  //   );
-  //
-  //   if (response.statusCode == 201) {
-  //     return UserSolicitation.fromJson(jsonDecode(response.body));
-  //   } else {
-  //     throw Exception('Failed to create album.');
-  //   }
-  // }
+  simulationProtectedCollateral(bool protected){
+    createSimulation(
+        name: nameUserData,
+        email: emailUserData,
+        //todo valor percentual 3,6,9
+        itv: 2121,
+        amount: valueUserData,
+        //todo prazo entrega 3,6,9 12
+        term: 21,
+        hasProtectedCollateral: protected);
+
+    print('dados retornados');
+    print('NAME $nameUserData');
+    print('EMAIL $emailUserData');
+    print('VALOR $valueUserData');
+    print('GARANTIA $protected');
+  }
+
+  Future<UserSolicitation> createSimulation({
+    String? name,
+    String? email,
+    int? itv,
+    double? amount,
+    int? term,
+    bool? hasProtectedCollateral,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': name,
+        'email': email,
+        'itv': int,
+        'amount': amount,
+        'term': term,
+        'has_protected_collateral': hasProtectedCollateral
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return UserSolicitation.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to create album.');
+    }
+  }
+
+  getDataUserToSimulation() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString('nameUser') ?? '';
+    final email = prefs.getString('emailUser') ?? '';
+    final valueSimulation = prefs.getDouble('valueSelected') ?? '';
+
+    setState((){
+      nameUserData = name;
+      emailUserData = email;
+      valueUserData = valueSimulation as double?;
+    });
+
+  }
 }

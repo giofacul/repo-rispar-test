@@ -1,5 +1,6 @@
 import 'package:app_rispar/bloc/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,14 +14,11 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailCTL = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  String? _name;
-  String? _email;
-
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
 
         if (!currentFocus.hasPrimaryFocus) {
@@ -35,12 +33,16 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                  AspectRatio(
-                    aspectRatio: 1.5,
-                    child: Image.asset("images/rispar_login.jpeg", fit: BoxFit.cover,),
-                  ),
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: Image.asset(
+                  "images/rispar_login.jpeg",
+                  fit: BoxFit.cover,
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -72,7 +74,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       key: _formKey,
                       child: Column(
                         children: [
-                          const SizedBox(height: 40,),
+                          const SizedBox(
+                            height: 40,
+                          ),
                           Row(
                             children: const [
                               Text(
@@ -88,7 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextFormField(
                             controller: nameCTL,
-                            onChanged: (value){setState(() {});},
+                            onChanged: (value) {
+                              setState(() {});
+                            },
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.name,
                             decoration: InputDecoration(
@@ -118,7 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
-                          const SizedBox(height: 20,),
+                          const SizedBox(
+                            height: 20,
+                          ),
                           Row(
                             children: const [
                               Text(
@@ -134,7 +142,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           TextFormField(
                             controller: emailCTL,
-                            onChanged: (value){setState(() {});},
+                            onChanged: (value) {
+                              setState(() {});
+                            },
                             textAlign: TextAlign.start,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
@@ -167,7 +177,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 50,),
+                    const SizedBox(
+                      height: 50,
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 1,
                       height: 60,
@@ -185,17 +197,21 @@ class _LoginScreenState extends State<LoginScreen> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 16),
                           ),
-                          onPressed: () {
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
                             if (_formKey.currentState!.validate()) {
                               //TODO SALVAR NOME E EMAIL NO SHARED PREFERENCES
-
+                              prefs.setString('nameUser', nameCTL.text);
+                              prefs.setString('emailUser', emailCTL.text);
+                              prefs.setBool('isLogged', true);
                               Navigator.pushNamed(context, '/home_screen');
                             }
                           }),
                     ),
-                    Padding( // this is new
-                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
-                    ),
+                    Padding(
+                        // this is new
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom)),
                   ],
                 ),
               ),

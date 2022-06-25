@@ -1,7 +1,7 @@
-
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/simulation_value_selected_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,13 +13,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textCtrl = TextEditingController();
   final formKeyValue = GlobalKey<FormState>();
-  bool enablePrefixText =false;
-  bool enableHintText =true;
+  bool enablePrefixText = false;
+  bool enableHintText = true;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         FocusScopeNode currentFocus = FocusScope.of(context);
 
         if (!currentFocus.hasPrimaryFocus) {
@@ -30,7 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false, // this is new
         backgroundColor: Colors.white,
-        appBar: CustomTopAppBar(valueProgressAppBar: 0.33, navigatorBackScreen: '/login_screen'),
+        appBar: CustomTopAppBar(
+            valueProgressAppBar: 0.33, navigatorBackScreen: '/login_screen'),
         body: SingleChildScrollView(
           reverse: true, // this is new
           child: Padding(
@@ -51,7 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const Text(
                       "você precisa?",
-                      style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -82,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 180,bottom: 220),
+                  padding: const EdgeInsets.only(top: 180, bottom: 220),
                   //TODO MASCARA TEXTFORMFIELD
                   child: Form(
                     key: formKeyValue,
@@ -98,18 +100,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       onTap: () {
                         enablePrefix();
-                       setState(() {});
+                        setState(() {});
                       },
                       textInputAction: TextInputAction.go,
                       onFieldSubmitted: (value) {
                         enableHint();
                       },
-                      onChanged: (value){
+                      onChanged: (value) async{
+                        final prefs = await SharedPreferences.getInstance();
                         print(value);
-                        if(value.length>3){
+                        if (value.length > 3) {
                           textCtrl.text.toString();
+                          prefs.setDouble(
+                              'valueSelected', double.parse(textCtrl.text));
                         }
-                        setState(() {});},
+                        setState(() {});
+                      },
                       textAlign: TextAlign.left,
                       keyboardType: const TextInputType.numberWithOptions(),
                       decoration: InputDecoration(
@@ -125,11 +131,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: Theme.of(context).primaryColor,
                             fontSize: 32,
                             fontWeight: FontWeight.bold),
-                        //TODO CENTRALIZAR O HINT
-                        hintStyle:
-                            const TextStyle(fontSize: 18, color: Colors.grey,),
-                       hintText:enableHintText==true?'Digite o valor desejado':'',
-                       prefixText: enablePrefixText==true?'R\$':'',
+                        hintStyle: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
+                        hintText: enableHintText == true
+                            ? 'Digite o valor desejado'
+                            : '',
+                        prefixText: enablePrefixText == true ? 'R\$' : '',
                       ),
                       style: TextStyle(
                           fontSize: 32,
@@ -144,32 +153,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   height: 60,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: enableButton() == true?Theme.of(context)
-                          .primaryColor.withOpacity(0.3):Theme.of(context)
-                          .primaryColor, // Background color
+                      primary: enableButton() == true
+                          ? Theme.of(context).primaryColor.withOpacity(0.3)
+                          : Theme.of(context).primaryColor, // Background color
                     ),
                     child: const Text(
                       "Continuar",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
-                    //TODO COLORIR BOTAO
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKeyValue.currentState!.validate()) {
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    SimulationValueSelectedScreen(
-                                      valueSolicited:
-                                          double.parse(textCtrl.text),
-                                    )));
+                                    SimulationValueSelectedScreen()));
                       }
                     },
                   ),
                 ),
-                Padding( // this is new
-                    padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom)
-                ),
+                Padding(
+                    // this is new
+                    padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom)),
               ],
             ),
           ),
@@ -177,24 +185,27 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   bool? enableButton() {
-    if(textCtrl.text.isEmpty || double.parse(textCtrl.text) <= 500 ||
-        double.parse(textCtrl.text) > 300000){
+    if (textCtrl.text.isEmpty ||
+        double.parse(textCtrl.text) <= 500 ||
+        double.parse(textCtrl.text) > 300000) {
       return true;
-    }return false;
+    }
+    return false;
   }
 
   void enableHint() {
-    if(textCtrl.text.isEmpty){
+    if (textCtrl.text.isEmpty) {
       enableHintText = true;
       enablePrefixText = false;
     }
   }
 
   void enablePrefix() {
-    if(textCtrl.text.isEmpty){
-      enablePrefixText=true;
-      enableHintText=false;
+    if (textCtrl.text.isEmpty) {
+      enablePrefixText = true;
+      enableHintText = false;
     }
   }
 }
