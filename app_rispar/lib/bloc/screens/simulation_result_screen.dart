@@ -1,5 +1,6 @@
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/home_screen.dart';
+import 'package:app_rispar/bloc/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class SimulationResultScreen extends StatefulWidget {
@@ -247,7 +248,7 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const HomeScreen()));
+                                  builder: (context) => const LoginScreen()));
                         },
                       ),
                     ),

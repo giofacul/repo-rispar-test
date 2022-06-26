@@ -10,7 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 class SimulationValueSelectedScreen extends StatefulWidget {
-  const SimulationValueSelectedScreen({Key? key}) : super(key: key);
+  SimulationValueSelectedScreen({Key? key}) : super(key: key);
 
   @override
   State<SimulationValueSelectedScreen> createState() =>
@@ -22,7 +22,7 @@ class _SimulationValueSelectedScreenState
   String? nameUserData;
   String? emailUserData;
   double? valueUserData;
-
+  SliderShapeQuantity? slider;
 
   @override
   void initState() {
@@ -32,7 +32,6 @@ class _SimulationValueSelectedScreenState
 
   @override
   Widget build(BuildContext context) {
-    print('RETORNO DO VALOR NO BUILD ${valueUserData.toString()}');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomTopAppBar(
@@ -72,7 +71,9 @@ class _SimulationValueSelectedScreenState
                   ),
                 ],
               ),
-              const SizedBox(height: 80, child: SliderShapeQuantity()),
+              const SizedBox(
+                  height: 80,
+                  child: SliderShapeQuantity()),
               const SizedBox(height: 24),
               Row(
                 children: const [
@@ -140,7 +141,6 @@ class _SimulationValueSelectedScreenState
                         context,
                         MaterialPageRoute(
                             builder: (context) => const LoadingScreen()));
-
                   },
                 ),
               )
@@ -151,7 +151,7 @@ class _SimulationValueSelectedScreenState
     );
   }
 
-  simulationProtectedCollateral(bool protected){
+  simulationProtectedCollateral(bool protected) {
     createSimulation(
         name: nameUserData,
         email: emailUserData,
@@ -167,6 +167,7 @@ class _SimulationValueSelectedScreenState
     print('EMAIL $emailUserData');
     print('VALOR $valueUserData');
     print('GARANTIA $protected');
+    // print('QUANTIDADE ${slider?.indSlider}');
   }
 
   Future<UserSolicitation> createSimulation({
@@ -205,11 +206,10 @@ class _SimulationValueSelectedScreenState
     final email = prefs.getString('emailUser') ?? '';
     final valueSimulation = prefs.getDouble('valueSelected') ?? '';
 
-    setState((){
+    setState(() {
       nameUserData = name;
       emailUserData = email;
       valueUserData = valueSimulation as double?;
     });
-
   }
 }

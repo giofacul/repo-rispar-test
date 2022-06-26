@@ -32,22 +32,24 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
             max: max,
             divisions: divisions,
             label: labels[indexSlider],
-            onChanged: (value) =>
-                setState(() => this.indexSlider = value.toInt()),
-
+            onChanged: (value) => setState(() {
+              this.indexSlider = value.toInt();
+              print('alterado p $indexSlider');
+            }),
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: Utils.modelBuilder(labels, (index, model){
+                children: Utils.modelBuilder(labels, (index, model) {
                   final selectedColor = Colors.black;
                   final unselectedColor = Colors.black.withOpacity(0.3);
                   //TODO PEGAR VALOR SELECIONADO PARA PARCELA
                   final isSelected = index <= indexSlider;
                   final color = isSelected ? selectedColor : unselectedColor;
 
-                  return buildLabel(label: model.toString(), color: color, width: 30);
+                  return buildLabel(
+                      label: model.toString(), color: color, width: 30);
                 })),
           ),
         ],
