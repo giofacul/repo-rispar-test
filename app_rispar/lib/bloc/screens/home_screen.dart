@@ -12,9 +12,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textCtrl = TextEditingController();
+
   final formKeyValue = GlobalKey<FormState>();
-  bool enablePrefixText = false;
-  bool enableHintText = true;
+
+  //bool enablePrefixText = false;
+  //bool enableHintText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }
-        enableHint();
+        // enableHint();
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false, // this is new
@@ -98,15 +100,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         }
                         return null;
                       },
-                      onTap: () {
-                        enablePrefix();
-                        setState(() {});
-                      },
+                      // onTap: () {
+                      //   enablePrefix();
+                      //   setState(() {});
+                      // },
                       textInputAction: TextInputAction.go,
-                      onFieldSubmitted: (value) {
-                        enableHint();
-                      },
-                      onChanged: (value) async{
+                      // onFieldSubmitted: (value) {
+                      //   enableHint();
+                      // },
+                      onChanged: (value) async {
                         final prefs = await SharedPreferences.getInstance();
                         print(value);
                         if (value.length > 3) {
@@ -135,10 +137,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 18,
                           color: Colors.grey,
                         ),
-                        hintText: enableHintText == true
+                        hintText: textCtrl.text.isEmpty
                             ? 'Digite o valor desejado'
                             : '',
-                        prefixText: enablePrefixText == true ? 'R\$' : '',
+                        // prefixText: enablePrefixText == true ? 'R\$' : '',
                       ),
                       style: TextStyle(
                           fontSize: 32,
@@ -164,7 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     onPressed: () async {
                       if (formKeyValue.currentState!.validate()) {
-
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -188,24 +189,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool? enableButton() {
     if (textCtrl.text.isEmpty ||
-        double.parse(textCtrl.text) <= 500 ||
+        double.parse(textCtrl.text) < 500 ||
         double.parse(textCtrl.text) > 300000) {
       return true;
     }
     return false;
   }
 
-  void enableHint() {
-    if (textCtrl.text.isEmpty) {
-      enableHintText = true;
-      enablePrefixText = false;
-    }
-  }
-
-  void enablePrefix() {
-    if (textCtrl.text.isEmpty) {
-      enablePrefixText = true;
-      enableHintText = false;
-    }
-  }
+// void enableHint() {
+//   if (textCtrl.text.isEmpty) {
+//     enableHintText = true;
+//     enablePrefixText = false;
+//   }
+// }
+//
+// void enablePrefix() {
+//   if (textCtrl.text.isEmpty) {
+//     enablePrefixText = true;
+//     enableHintText = false;
+//   }
+// }
 }
