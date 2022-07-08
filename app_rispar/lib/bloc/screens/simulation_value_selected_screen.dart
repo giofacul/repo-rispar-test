@@ -60,17 +60,20 @@ class _SimulationValueSelectedScreenState
             ),
             // const SizedBox(height: 24),
             Flexible(
-              child: Row(
-                children: const [
-                  Text(
-                    "Escolha a ",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    "quantidade de parcelas",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ],
+              child: FittedBox(
+                child: Row(
+                  children: const [
+                    Text(
+                      "Escolha a ",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      "quantidade de parcelas",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 80, child: SliderShapeQuantity()),
