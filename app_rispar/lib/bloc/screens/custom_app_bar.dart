@@ -5,8 +5,11 @@ class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
   final bool? isResultPageReturn;
   final String? navigatorBackScreen;
 
-  CustomTopAppBar(
-      {Key? key, required this.valueProgressAppBar, this.isResultPageReturn, this.navigatorBackScreen})
+  const CustomTopAppBar(
+      {Key? key,
+      required this.valueProgressAppBar,
+      this.isResultPageReturn,
+      this.navigatorBackScreen})
       : super(key: key);
 
   @override
@@ -17,7 +20,6 @@ class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _CustomTopAppBarState extends State<CustomTopAppBar> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,9 +30,9 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
             elevation: 0,
             leading: IconButton(
               icon:
-              //TODO RETORNAR DADOS DO SHARED P/ LOGIN QUANDO FAZER LOGOF NO VOLTAR
-              //TODO INSERIR MODAL PARA FAZER LOGOFF NA SETA
-              Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
+                  //TODO RETORNAR DADOS DO SHARED P/ LOGIN QUANDO FAZER LOGOF NO VOLTAR
+                  //TODO INSERIR MODAL PARA FAZER LOGOFF NA SETA
+                  Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
               onPressed: () {
                 if (widget.isResultPageReturn == true) {
                   Navigator.pushNamed(context, '/simulation_value');

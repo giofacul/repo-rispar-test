@@ -17,7 +17,7 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
 
   Widget buildSlider() {
     final labels = ['3', '6', '9', '12'];
-    final double min = 0;
+    const double min = 0;
     final double max = labels.length - 1.0;
     final divisions = labels.length - 1;
 
@@ -33,7 +33,7 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
             divisions: divisions,
             label: labels[indexSlider],
             onChanged: (value) => setState(() {
-              this.indexSlider = value.toInt();
+              indexSlider = value.toInt();
               print('alterado p $indexSlider');
             }),
           ),
@@ -42,7 +42,7 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: Utils.modelBuilder(labels, (index, model) {
-                  final selectedColor = Colors.black;
+                  const selectedColor = Colors.black;
                   final unselectedColor = Colors.black.withOpacity(0.3);
                   //TODO PEGAR VALOR SELECIONADO PARA PARCELA
                   final isSelected = index <= indexSlider;
@@ -62,12 +62,12 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
     required double width,
     required Color color,
   }) =>
-      Container(
+      SizedBox(
         width: width,
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ).copyWith(color: color),

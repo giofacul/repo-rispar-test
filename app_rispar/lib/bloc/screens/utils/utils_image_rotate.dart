@@ -28,15 +28,19 @@ class _UtilsImageRotateState extends State<UtilsImageRotate>
       color: Colors.white,
       child: AnimatedBuilder(
         animation: animationController!,
-        child: Container(
+        child: SizedBox(
           height: 80.0,
           width: 80.0,
-          child: Icon(Icons.light_mode_outlined, color: Theme.of(context).primaryColor, size: 40,),
+          child: Icon(
+            Icons.light_mode_outlined,
+            color: Theme.of(context).primaryColor,
+            size: 40,
+          ),
         ),
-        builder: (BuildContext context, Widget? _widget) {
+        builder: (BuildContext context, Widget? widget) {
           return Transform.rotate(
             angle: animationController!.value * 4,
-            child: _widget,
+            child: widget,
           );
         },
       ),

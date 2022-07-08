@@ -17,7 +17,7 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
 
   Widget buildSlider() {
     final labels = ['20%', '35%', '50%'];
-    final double min = 0;
+    const double min = 0;
     final double max = labels.length - 1.0;
     final divisions = labels.length - 1;
 
@@ -32,22 +32,21 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
             max: max,
             divisions: divisions,
             label: labels[indexSlider],
-            onChanged: (value) =>
-                setState(() => this.indexSlider = value.toInt()),
-
+            onChanged: (value) => setState(() => indexSlider = value.toInt()),
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: Utils.modelBuilder(labels, (index, model){
-                  final selectedColor = Colors.black;
+                children: Utils.modelBuilder(labels, (index, model) {
+                  const selectedColor = Colors.black;
                   final unselectedColor = Colors.black.withOpacity(0.3);
                   //TODO PEGAR VALOR SELECIONADO PARA PARCELA
                   final isSelected = index <= indexSlider;
                   final color = isSelected ? selectedColor : unselectedColor;
 
-                  return buildLabel(label: model.toString(), color: color, width: 40);
+                  return buildLabel(
+                      label: model.toString(), color: color, width: 40);
                 })),
           ),
         ],
@@ -60,12 +59,12 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
     required double width,
     required Color color,
   }) =>
-      Container(
+      SizedBox(
         width: width,
         child: Text(
           label,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ).copyWith(color: color),
