@@ -1,6 +1,8 @@
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/home_screen.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SimulationResultScreen extends StatefulWidget {
   const SimulationResultScreen({Key? key}) : super(key: key);
@@ -10,7 +12,16 @@ class SimulationResultScreen extends StatefulWidget {
 }
 
 class _SimulationResultScreenState extends State<SimulationResultScreen> {
+  String? valueSelectedReturn;
+
   //TODO TRAZER DADOS DE RETORNO DA API
+
+  @override
+  void initState() {
+    super.initState();
+    getDataValueSelected();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -260,5 +271,17 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
         ),
       ),
     );
+  }
+
+  getDataValueSelected() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    double valueSelected = prefs.getDouble('valueSelected') ?? 000.000;
+    String valor =
+    UtilBrasilFields.obterReal(valueSelected, moeda: false, decimal: 0)
+        .toString();
+
+    setState(() {
+      valueSelectedReturn = valor;
+    });
   }
 }

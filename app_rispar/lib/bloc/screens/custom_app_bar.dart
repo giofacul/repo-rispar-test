@@ -62,6 +62,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setString('nameUser', '');
                         prefs.setString('emailUser', '');
+                        prefs.setDouble('emailUser', 000.000);
                         Navigator.pushNamed(context, '/login_screen');
                       },
                     ),
