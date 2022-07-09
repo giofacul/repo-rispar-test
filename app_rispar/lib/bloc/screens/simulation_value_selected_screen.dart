@@ -21,7 +21,7 @@ class _SimulationValueSelectedScreenState
     extends State<SimulationValueSelectedScreen> {
   String? nameUserData;
   String? emailUserData;
-  double valueUserData = 0;
+  double? valueUserData;
   SliderShapeQuantity? slider;
 
   @override
@@ -49,8 +49,8 @@ class _SimulationValueSelectedScreenState
               ),
             ),
             Flexible(
-              child: Text(
-                'R\$ ${UtilBrasilFields.obterReal(valueUserData, moeda: false, decimal: 0)}',
+              child: Text(valueUserData == null ? '' :
+                'R\$ ${UtilBrasilFields.obterReal(valueUserData!, moeda: false, decimal: 0)}',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -76,7 +76,7 @@ class _SimulationValueSelectedScreenState
                 ),
               ),
             ),
-            const SizedBox(height: 80, child: SliderShapeQuantity()),
+            SizedBox(height: 80, child: SliderShapeQuantity(onChangedQuantity: slider?.onChangedQuantity,)),
             Flexible(
               child: Row(
                 children: const [
@@ -120,7 +120,7 @@ class _SimulationValueSelectedScreenState
                   ),
                   onPressed: () {
                     print('VALOR $valueUserData');
-                    // simulationProtectedCollateral(false);
+                    simulationProtectedCollateral(false);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -143,7 +143,7 @@ class _SimulationValueSelectedScreenState
                   ),
                   onPressed: () {
                     print('VALOR $valueUserData');
-                    //  simulationProtectedCollateral(true);
+                     simulationProtectedCollateral(true);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -158,54 +158,55 @@ class _SimulationValueSelectedScreenState
     );
   }
 
-  // simulationProtectedCollateral(bool protected) {
-  //   createSimulation(
-  //       name: nameUserData,
-  //       email: emailUserData,
-  //       //todo valor percentual 3,6,9
-  //       itv: 2121,
-  //       amount: valueUserData,
-  //       //todo prazo entrega 3,6,9 12
-  //       term: 21,
-  //       hasProtectedCollateral: protected);
+  simulationProtectedCollateral(bool protected) {
+    createSimulation(
+        name: nameUserData,
+        email: emailUserData,
+        //todo valor percentual 3,6,9
+        itv: 2121,
+        amount: valueUserData,
+        //todo prazo entrega 3,6,9 12
+        term: 21,
+        hasProtectedCollateral: protected);
 
-  //   print('dados retornados');
-  //   print('NAME $nameUserData');
-  //   print('EMAIL $emailUserData');
-  //   print('VALOR $valueUserData');
-  //   print('GARANTIA $protected');
-  //   // print('QUANTIDADE ${slider?.indSlider}');
-  // }
+    print('dados retornados');
+    print('NAME $nameUserData');
+    print('EMAIL $emailUserData');
+    print('VALOR ${valueUserData?.round()}');
+    print('GARANTIA $protected');
+    //todo criar o retorno do slider
+    print('QUANTIDADE ${slider?.onChangedQuantity}');
+  }
 
-  // Future<UserSolicitation> createSimulation({
-  //   String? name,
-  //   String? email,
-  //   int? itv,
-  //   double? amount,
-  //   int? term,
-  //   bool? hasProtectedCollateral,
-  // }) async {
-  //   final response = await http.post(
-  //     Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
-  //     headers: <String, String>{
-  //       'Content-Type': 'application/json; charset=UTF-8',
-  //     },
-  //     body: jsonEncode(<String, dynamic>{
-  //       'name': name,
-  //       'email': email,
-  //       'itv': int,
-  //       'amount': amount,
-  //       'term': term,
-  //       'has_protected_collateral': hasProtectedCollateral
-  //     }),
-  //   );
+  Future<UserSolicitation> createSimulation({
+    String? name,
+    String? email,
+    int? itv,
+    double? amount,
+    int? term,
+    bool? hasProtectedCollateral,
+  }) async {
+    final response = await http.post(
+      Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        'name': name,
+        'email': email,
+        'itv': int,
+        'amount': amount,
+        'term': term,
+        'has_protected_collateral': hasProtectedCollateral
+      }),
+    );
 
-  //   if (response.statusCode == 201) {
-  //     return UserSolicitation.fromJson(jsonDecode(response.body));
-  //   } else {
-  //     throw Exception('Failed to create album.');
-  //   }
-  // }
+    if (response.statusCode == 201) {
+      return UserSolicitation.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to create album.');
+    }
+  }
 
   getDataUserToSimulation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

@@ -3,7 +3,8 @@ import 'package:app_rispar/bloc/screens/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SliderShapeQuantity extends StatefulWidget {
-  const SliderShapeQuantity({Key? key}) : super(key: key);
+  final ValueChanged<int>? onChangedQuantity;
+  const SliderShapeQuantity({Key? key, this.onChangedQuantity}) : super(key: key);
 
   @override
   State<SliderShapeQuantity> createState() => _SliderShapeQuantityState();
@@ -35,6 +36,21 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
             onChanged: (value) => setState(() {
               indexSlider = value.toInt();
               print('alterado p $indexSlider');
+              switch(indexSlider){
+                case 0:
+                  widget.onChangedQuantity!(3);
+                  break;
+                case 1:
+                  widget.onChangedQuantity!(6);
+                  break;
+                case 2:
+                  widget.onChangedQuantity!(9);
+                  break;
+                case 3:
+                  widget.onChangedQuantity!(12);
+                  break;
+              }
+
             }),
           ),
           Container(
@@ -44,7 +60,6 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
                 children: Utils.modelBuilder(labels, (index, model) {
                   const selectedColor = Colors.black;
                   final unselectedColor = Colors.black.withOpacity(0.3);
-                  //TODO PEGAR VALOR SELECIONADO PARA PARCELA
                   final isSelected = index <= indexSlider;
                   final color = isSelected ? selectedColor : unselectedColor;
 
