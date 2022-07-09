@@ -11,8 +11,16 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController nameCTL = TextEditingController();
   TextEditingController emailCTL = TextEditingController();
+  String? nameUserData;
+  String? emailUserData;
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    getDataInitialized();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     color: Theme.of(context).primaryColor,
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold),
-                                hintStyle: const TextStyle(
-                                    fontSize: 18, color: Colors.grey),
+                                hintStyle:
+                                    TextStyle(fontSize: 18, color: Colors.grey),
                                 hintText: 'Nome Completo',
                               ),
                               validator: (value) {
@@ -233,5 +241,16 @@ class _LoginScreenState extends State<LoginScreen> {
       return true;
     }
     return false;
+  }
+
+  getDataInitialized() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final name = prefs.getString('nameUser') ?? '';
+    final email = prefs.getString('emailUser') ?? '';
+
+    setState(() {
+      nameCTL = TextEditingController(text: name);
+      emailCTL = TextEditingController(text: email);
+    });
   }
 }

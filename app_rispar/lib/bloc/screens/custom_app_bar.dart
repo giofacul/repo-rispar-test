@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomTopAppBar extends StatefulWidget implements PreferredSizeWidget {
   final double valueProgressAppBar;
@@ -26,33 +27,48 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(50),
         child: AppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            leading: IconButton(
-              icon:
-                  //TODO RETORNAR DADOS DO SHARED P/ LOGIN QUANDO FAZER LOGOF NO VOLTAR
-                  //TODO INSERIR MODAL PARA FAZER LOGOFF NA SETA
-                  Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
-              onPressed: () {
-                if (widget.isResultPageReturn == true) {
-                  Navigator.pushNamed(context, '/simulation_value');
-                } else {
-                  Navigator.pushNamed(context, widget.navigatorBackScreen!);
-                }
-              },
-            ),
-            title: Padding(
-              padding: const EdgeInsets.only(left: 10, right: 30),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: LinearProgressIndicator(
-                  minHeight: 6,
-                  value: widget.valueProgressAppBar,
-                  color: Theme.of(context).primaryColor,
-                  backgroundColor: Colors.grey,
-                ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
+            onPressed: () {
+              if (widget.isResultPageReturn == true) {
+                Navigator.pushNamed(context, '/simulation_value');
+              } else {
+                Navigator.pushNamed(context, widget.navigatorBackScreen!);
+              }
+            },
+          ),
+          title: Padding(
+            padding: const EdgeInsets.only(left: 10, right: 30),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: LinearProgressIndicator(
+                minHeight: 6,
+                value: widget.valueProgressAppBar,
+                color: Theme.of(context).primaryColor,
+                backgroundColor: Colors.grey,
               ),
-            )),
+            ),
+          ),
+          actions: widget.isResultPageReturn == true
+              ? [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: IconButton(
+                      icon: const Icon(Icons.logout_rounded),
+                      color: Theme.of(context).primaryColor,
+                      onPressed: () async {
+                        final prefs = await SharedPreferences.getInstance();
+                        prefs.setString('nameUser', '');
+                        prefs.setString('emailUser', '');
+                        Navigator.pushNamed(context, '/login_screen');
+                      },
+                    ),
+                  )
+                ]
+              : null,
+        ),
       ),
     );
   }
