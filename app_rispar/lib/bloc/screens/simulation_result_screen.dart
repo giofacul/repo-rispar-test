@@ -13,6 +13,7 @@ class SimulationResultScreen extends StatefulWidget {
 
 class _SimulationResultScreenState extends State<SimulationResultScreen> {
   String valueSelectedReturn = '000.000';
+  String percentSelectedReturn = '20';
 
   //TODO TRAZER DADOS DE RETORNO DA API
 
@@ -102,14 +103,14 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                       const Text(
                           'Percentual de garantia',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'R\$ [344343]',
-                          style: TextStyle(
+                          '$percentSelectedReturn%',
+                          style: const TextStyle(
                               color: Colors.black38, fontWeight: FontWeight.bold),
                         )
                       ],
@@ -279,9 +280,12 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
     String valor =
     UtilBrasilFields.obterReal(valueSelected, moeda: false, decimal: 0)
         .toString();
+    int percentValueSelected = prefs.getInt('percentValue') ?? 20;
+
 
     setState(() {
       valueSelectedReturn = valor;
+      percentSelectedReturn = percentValueSelected.toString();
     });
   }
 }

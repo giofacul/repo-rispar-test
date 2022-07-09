@@ -23,6 +23,8 @@ class _SimulationValueSelectedScreenState
   String? emailUserData;
   double? valueUserData;
   SliderShapeQuantity? slider;
+  int? sliderQuantity;
+  int? sliderPercent;
 
   @override
   void initState() {
@@ -49,8 +51,10 @@ class _SimulationValueSelectedScreenState
               ),
             ),
             Flexible(
-              child: Text(valueUserData == null ? '' :
-                'R\$ ${UtilBrasilFields.obterReal(valueUserData!, moeda: false, decimal: 0)}',
+              child: Text(
+                valueUserData == null
+                    ? ''
+                    : 'R\$ ${UtilBrasilFields.obterReal(valueUserData!, moeda: false, decimal: 0)}',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -76,7 +80,14 @@ class _SimulationValueSelectedScreenState
                 ),
               ),
             ),
-            SizedBox(height: 80, child: SliderShapeQuantity(onChangedQuantity: slider?.onChangedQuantity,)),
+            SizedBox(
+                height: 80,
+                child: SliderShapeQuantity(
+                  onChangedQuantity: (value) {
+                    sliderQuantity = value;
+                    print('SLIDER QUANTITY RETURN $sliderQuantity');
+                  },
+                )),
             Flexible(
               child: Row(
                 children: const [
@@ -91,7 +102,12 @@ class _SimulationValueSelectedScreenState
                 ],
               ),
             ),
-            const SizedBox(height: 80, child: SliderShapePercent()),
+            SizedBox(
+                height: 80,
+                child: SliderShapePercent(onChangedPercent: (value) {
+                  sliderPercent = value;
+                  print('SLIDER PERCENT RETURN $sliderPercent');
+                })),
             Flexible(
               child: Text(
                 'Garantia protegida',
@@ -143,7 +159,7 @@ class _SimulationValueSelectedScreenState
                   ),
                   onPressed: () {
                     print('VALOR $valueUserData');
-                     simulationProtectedCollateral(true);
+                    simulationProtectedCollateral(true);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -158,24 +174,27 @@ class _SimulationValueSelectedScreenState
     );
   }
 
-  simulationProtectedCollateral(bool protected) {
+  simulationProtectedCollateral(bool protected) async {
     createSimulation(
         name: nameUserData,
         email: emailUserData,
-        //todo valor percentual 3,6,9
-        itv: 2121,
+        //PERCENTUAL DE GARANTIA
+        itv: sliderQuantity ?? (sliderQuantity = 3),
         amount: valueUserData,
-        //todo prazo entrega 3,6,9 12
-        term: 21,
+        //PARCELAS
+        term: sliderPercent ?? (sliderPercent = 20),
         hasProtectedCollateral: protected);
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('percentValue', sliderPercent!);
 
     print('dados retornados');
     print('NAME $nameUserData');
     print('EMAIL $emailUserData');
     print('VALOR ${valueUserData?.round()}');
     print('GARANTIA $protected');
-    //todo criar o retorno do slider
-    print('QUANTIDADE ${slider?.onChangedQuantity}');
+    print('QUANTIDADE $sliderQuantity');
+    print('PARCELAS $sliderPercent');
   }
 
   Future<UserSolicitation> createSimulation({

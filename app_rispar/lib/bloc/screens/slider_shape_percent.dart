@@ -3,7 +3,10 @@ import 'package:app_rispar/bloc/screens/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SliderShapePercent extends StatefulWidget {
-  const SliderShapePercent({Key? key}) : super(key: key);
+  final ValueChanged<int> onChangedPercent;
+
+  const SliderShapePercent({Key? key, required this.onChangedPercent})
+      : super(key: key);
 
   @override
   State<SliderShapePercent> createState() => _SliderShapePercentState();
@@ -32,7 +35,21 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
             max: max,
             divisions: divisions,
             label: labels[indexSlider],
-            onChanged: (value) => setState(() => indexSlider = value.toInt()),
+            onChanged: (value) => setState(() {
+              indexSlider = value.toInt();
+              widget.onChangedPercent(indexSlider);
+              switch (indexSlider) {
+                case 1:
+                  widget.onChangedPercent(35);
+                  break;
+                case 2:
+                  widget.onChangedPercent(50);
+                  break;
+                default:
+                  widget.onChangedPercent(20);
+                  break;
+              }
+            }),
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -41,7 +58,6 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
                 children: Utils.modelBuilder(labels, (index, model) {
                   const selectedColor = Colors.black;
                   final unselectedColor = Colors.black.withOpacity(0.3);
-                  //TODO PEGAR VALOR SELECIONADO PARA PARCELA
                   final isSelected = index <= indexSlider;
                   final color = isSelected ? selectedColor : unselectedColor;
 
