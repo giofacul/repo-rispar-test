@@ -12,7 +12,7 @@ class SimulationResultScreen extends StatefulWidget {
 }
 
 class _SimulationResultScreenState extends State<SimulationResultScreen> {
-  String? valueSelectedReturn;
+  String valueSelectedReturn = '000.000';
 
   //TODO TRAZER DADOS DE RETORNO DA API
 
@@ -48,14 +48,14 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Valor Escolhido',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'R\$ [344343]',
-                          style: TextStyle(
+                          'R\$ $valueSelectedReturn',
+                          style:  const TextStyle(
                               color: Colors.black38, fontWeight: FontWeight.bold),
                         )
                       ],
