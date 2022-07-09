@@ -98,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 key: formKeyValue,
                 child: TextFormField(
                   inputFormatters: [
+                    LengthLimitingTextInputFormatter(7),
                     FilteringTextInputFormatter.digitsOnly,
                     RealInputFormatter(),
                   ],
@@ -128,26 +129,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   textAlign: TextAlign.left,
                   keyboardType: const TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(color: Colors.grey),
-                    ),
-                    focusedBorder: UnderlineInputBorder(
-                      borderSide:
-                          BorderSide(color: Theme.of(context).primaryColor),
-                    ),
-                    contentPadding: EdgeInsets.zero,
-                    prefixStyle: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold),
-                    hintStyle: const TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey,
-                    ),
-                    hintText:
-                        textCtrl.text.isEmpty ? 'Digite o valor desejado' : '',
-                    prefixText: enablePrefixText == true ? 'R\$' : '',
-                  ),
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide:
+                            BorderSide(color: Theme.of(context).primaryColor),
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                      prefixStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold),
+                      hintStyle: const TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey,
+                      ),
+                      hintText: textCtrl.text.isEmpty
+                          ? 'Digite o valor desejado'
+                          : '',
+                      prefixText: enablePrefixText == true ? 'R\$' : '',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          Icons.close,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: textCtrl.clear,
+                      )),
                   style: TextStyle(
                       fontSize: 32,
                       color: Theme.of(context).primaryColor,
