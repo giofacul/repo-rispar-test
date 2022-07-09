@@ -60,9 +60,9 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
                       color: Theme.of(context).primaryColor,
                       onPressed: () async {
                         final prefs = await SharedPreferences.getInstance();
-                        prefs.setString('nameUser', '');
-                        prefs.setString('emailUser', '');
-                        prefs.setDouble('emailUser', 000.000);
+                        // prefs.setString('nameUser', '');
+                        // prefs.setString('emailUser', '');
+                        prefs.clear();
                         Navigator.pushNamed(context, '/login_screen');
                       },
                     ),

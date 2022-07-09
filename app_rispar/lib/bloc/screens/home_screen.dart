@@ -23,7 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     getDataValueSelected();
-    enablePrefix();
   }
 
   @override
@@ -234,10 +233,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getDataValueSelected() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    double valueSelected = prefs.getDouble('valueSelected') ?? 000.000;
+    double? valueSelected = prefs.getDouble('valueSelected');
     String valor =
-        UtilBrasilFields.obterReal(valueSelected, moeda: false, decimal: 0)
+        UtilBrasilFields.obterReal(valueSelected!, moeda: false, decimal: 0)
             .toString();
+
+    if (valor.isNotEmpty) {
+      enablePrefix();
+    } else {
+      enableHint();
+    }
 
     setState(() {
       textCtrl = TextEditingController(text: valor);
