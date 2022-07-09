@@ -21,7 +21,7 @@ class _SimulationValueSelectedScreenState
     extends State<SimulationValueSelectedScreen> {
   String? nameUserData;
   String? emailUserData;
-  double? valueUserData;
+  double valueUserData = 0;
   SliderShapeQuantity? slider;
 
   @override
@@ -50,7 +50,7 @@ class _SimulationValueSelectedScreenState
             ),
             Flexible(
               child: Text(
-                'R\$ ${valueUserData?.round()}',
+                'R\$ ${UtilBrasilFields.obterReal(valueUserData, moeda: false, decimal: 0)}',
                 style: TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
@@ -216,7 +216,7 @@ class _SimulationValueSelectedScreenState
     setState(() {
       nameUserData = name;
       emailUserData = email;
-      valueUserData = valueSimulation as double?;
+      valueUserData = valueSimulation as double;
     });
   }
 }
