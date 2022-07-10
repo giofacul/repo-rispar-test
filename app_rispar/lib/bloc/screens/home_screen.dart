@@ -149,13 +149,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? 'Digite o valor desejado'
                           : '',
                       prefixText: enablePrefixText == true ? 'R\$' : '',
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.close,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                        onPressed: textCtrl.clear,
-                      )),
+                      suffixIcon: textCtrl.text.isEmpty
+                          ? null
+                          : IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onPressed: () {
+                                textCtrl.clear();
+                                setState(() {});
+                              },
+                            )),
                   style: TextStyle(
                       fontSize: 32,
                       color: Theme.of(context).primaryColor,
