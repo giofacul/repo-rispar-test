@@ -12,6 +12,7 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  AnimationController? animationController;
 
   @override
   void initState() {
@@ -62,6 +63,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
       )),
     );
   }
+
+  @override
+  dispose() {
+    animationController?.dispose(); // you need this
+    super.dispose();
+  }
   startSplashScreenTimer() async{
     const Duration duration = Duration(seconds: 4);
     return Timer(duration, navigationToNextPage);
@@ -73,4 +80,5 @@ class _LoadingScreenState extends State<LoadingScreen> {
         MaterialPageRoute(
             builder: (context) => const SimulationResultScreen()));
   }
+
 }
