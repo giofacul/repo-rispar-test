@@ -37,7 +37,6 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
             label: labels[indexSlider],
             onChanged: (value) => setState(() {
               indexSlider = value.toInt();
-              print('alterado p $indexSlider');
               widget.onChangedQuantity(indexSlider);
               switch (indexSlider) {
                 case 1:

@@ -135,11 +135,11 @@ class _SimulationValueSelectedScreenState
                   ),
                   onPressed: () {
                     print('VALOR $valueUserData');
-                    // simulationProtectedCollateral(false);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoadingScreen()));
+                    simulationProtectedCollateral(false);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const LoadingScreen()));
                   },
                 ),
               ),
@@ -158,11 +158,11 @@ class _SimulationValueSelectedScreenState
                   ),
                   onPressed: () {
                     print('VALOR $valueUserData');
-                    // simulationProtectedCollateral(true);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoadingScreen()));
+                    simulationProtectedCollateral(true);
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //         builder: (context) => const LoadingScreen()));
                   },
                 ),
               ),
@@ -173,7 +173,13 @@ class _SimulationValueSelectedScreenState
     );
   }
 
-  // simulationProtectedCollateral(bool protected) async {
+  simulationProtectedCollateral(bool protected) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isProtectedValue', protected);
+    prefs.setInt('percentValue', sliderPercent ?? (sliderPercent = 20));
+    await _navigationToNextPage();
+  }
+
   //   createSimulation(
   //       name: nameUserData,
   //       email: emailUserData,
@@ -204,19 +210,19 @@ class _SimulationValueSelectedScreenState
   //   int? term,
   //   bool? hasProtectedCollateral,
   // }) async {
-    // final response = await http.get(
-    //   Uri.parse('https://random-data-api.com/api/omniauth/github_get'),
-      // headers: <String, String>{
-      //   'Content-Type': 'application/json; charset=UTF-8',
-      // },
-      // body: jsonEncode(<String, dynamic>{
-      //   'name': name,
-      //   'email': email,
-      //   'itv': int,
-      //   'amount': amount,
-      //   'term': term,
-      //   'has_protected_collateral': hasProtectedCollateral
-      // }),
+  // final response = await http.get(
+  //   Uri.parse('https://random-data-api.com/api/omniauth/github_get'),
+  // headers: <String, String>{
+  //   'Content-Type': 'application/json; charset=UTF-8',
+  // },
+  // body: jsonEncode(<String, dynamic>{
+  //   'name': name,
+  //   'email': email,
+  //   'itv': int,
+  //   'amount': amount,
+  //   'term': term,
+  //   'has_protected_collateral': hasProtectedCollateral
+  // }),
   //   );
   //   print('RETORNO DOS DADOS DO RESPONSE BODI ${response.body}');
   //
@@ -238,5 +244,10 @@ class _SimulationValueSelectedScreenState
       emailUserData = email;
       valueUserData = valueSimulation as double;
     });
+  }
+
+  _navigationToNextPage() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const LoadingScreen()));
   }
 }

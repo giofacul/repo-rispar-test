@@ -4,6 +4,7 @@ import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/home_screen.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,7 +21,11 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
   // UserSolicitationModel? userSolicitationModel;
 
   String valueSelectedReturn = '000.000';
-  String percentSelectedReturn = '20';
+  String? percentSelectedReturn;
+  String? isEmailReturn;
+  String? isNameReturn;
+  bool? isWarrantyResult;
+  String? dataValidateResult;
 
  late Future<UserSolicitationModel>? futureAlbum;
 
@@ -106,8 +111,8 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           builder: (context, snapshot) {
                           print('FUTURE juros RETORNO ${snapshot.data!.valueWarranty}');
                             if (snapshot.hasData) {
-                              return Text(snapshot.data!.valueWarranty ?? '',
-                                style: const TextStyle(fontSize: 12, color: Colors.cyan),
+                              return Text(snapshot.data!.valueWarranty ?? 'Não Retornado',
+                                style: const TextStyle(fontSize: 12, color: Colors.black38, fontWeight: FontWeight.bold),
                               );
                             } else if (snapshot.hasError) {
                               return const Text('ERROU');
@@ -172,15 +177,15 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children:  [
+                        const Text(
                           'Primeiro vencimento',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          //TODO CALCULAR DATA ATUAL + 30 DIAS
-                          '30/03/3000',
-                          style: TextStyle(
+                          dataValidateResult != null ?
+                          '$dataValidateResult' : 'Data inválida',
+                          style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
                         )
@@ -212,15 +217,14 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Nome do usuário',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          //TODO RETORNAR SHARED NOME
-                          'R\$ [344343]',
-                          style: TextStyle(
+                        Text(isNameReturn != null ?
+                        '$isNameReturn' : 'Nome Inválido',
+                          style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
                         )
@@ -232,15 +236,14 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Email do usuário',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          //TODO SHARED EMAIL
-                          'R\$ [344343]',
-                          style: TextStyle(
+                        Text( isEmailReturn != null ?
+                          '$isEmailReturn' : 'Email Inválido',
+                          style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
                         )
@@ -271,15 +274,15 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Tipo da Simulação',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          //TODO COM OU SEM GARANTIA
-                          'COM GARANTIA',
-                          style: TextStyle(
+                          isWarrantyResult == true ? "Com Garantia" :
+                          'Sem Garantia',
+                          style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
                         )
@@ -323,14 +326,28 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
   getDataValueSelected() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     double valueSelected = prefs.getDouble('valueSelected') ?? 000.000;
+    int? percentValueSelected = prefs.getInt('percentValue');
+    bool? isWarrantySelected = prefs.getBool('isProtectedValue');
+    String? emailValue = prefs.getString('emailUser');
+    String? nameValue = prefs.getString('nameUser');
+
+    var now = DateTime.now();
+    var monthDate = DateTime.now().month + 2;
+    var formatter = DateFormat('d/$monthDate/yy');
+    String formattedDate = formatter.format(now);
+
     String valor =
         UtilBrasilFields.obterReal(valueSelected, moeda: false, decimal: 0)
             .toString();
-    int percentValueSelected = prefs.getInt('percentValue') ?? 20;
 
     setState(() {
       valueSelectedReturn = valor;
       percentSelectedReturn = percentValueSelected.toString();
+      isWarrantyResult = isWarrantySelected;
+      isEmailReturn = emailValue.toString();
+      isNameReturn = nameValue.toString();
+      dataValidateResult = formattedDate;
+      print("VALOR PROTEGIDO? $isWarrantyResult");
     });
   }
 
