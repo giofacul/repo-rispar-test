@@ -40,7 +40,7 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
             },
           ),
           title: Padding(
-            padding: const EdgeInsets.only(left: 10, right: 30),
+            padding: const EdgeInsets.all(0),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: LinearProgressIndicator(
@@ -60,9 +60,8 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
                       color: Theme.of(context).primaryColor,
                       onPressed: () async {
                         final prefs = await SharedPreferences.getInstance();
-                        prefs.setString('nameUser', '');
-                        prefs.setString('emailUser', '');
-                        Navigator.pushNamed(context, '/login_screen');
+                        prefs.clear();
+                        _navigatorSignout();
                       },
                     ),
                   )
@@ -71,5 +70,9 @@ class _CustomTopAppBarState extends State<CustomTopAppBar> {
         ),
       ),
     );
+  }
+
+  _navigatorSignout(){
+    Navigator.pushNamed(context, '/login_screen');
   }
 }

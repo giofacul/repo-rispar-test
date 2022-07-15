@@ -3,7 +3,10 @@ import 'package:app_rispar/bloc/screens/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SliderShapePercent extends StatefulWidget {
-  const SliderShapePercent({Key? key}) : super(key: key);
+  final ValueChanged<int> onChangedPercent;
+
+  const SliderShapePercent({Key? key, required this.onChangedPercent})
+      : super(key: key);
 
   @override
   State<SliderShapePercent> createState() => _SliderShapePercentState();
@@ -31,7 +34,21 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
           max: max,
           divisions: divisions,
           label: labels[indexSlider],
-          onChanged: (value) => setState(() => indexSlider = value.toInt()),
+          onChanged: (value) => setState(() {
+            indexSlider = value.toInt();
+            widget.onChangedPercent(indexSlider);
+            switch (indexSlider) {
+              case 1:
+                widget.onChangedPercent(35);
+                break;
+              case 2:
+                widget.onChangedPercent(50);
+                break;
+              default:
+                widget.onChangedPercent(20);
+                break;
+            }
+          }),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
