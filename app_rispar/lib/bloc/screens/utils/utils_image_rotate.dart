@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class UtilsImageRotate extends StatefulWidget {
@@ -28,14 +29,27 @@ class _UtilsImageRotateState extends State<UtilsImageRotate>
       color: Colors.white,
       child: AnimatedBuilder(
         animation: animationController!,
-        child: SizedBox(
-          height: 80.0,
-          width: 80.0,
-          child: Icon(
-            Icons.light_mode_outlined,
-            color: Theme.of(context).primaryColor,
-            size: 40,
-          ),
+        child: Stack(
+          children: [
+            SizedBox(
+              height: 80.0,
+              width: 80.0,
+              child: Icon(
+                Icons.light_mode_sharp,
+                color: Theme.of(context).primaryColor,
+                size: 40,
+              ),
+            ),
+            const SizedBox(
+              height: 80.0,
+              width: 80.0,
+              child: Icon(
+                Icons.circle,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ],
         ),
         builder: (BuildContext context, Widget? widget) {
           return Transform.rotate(

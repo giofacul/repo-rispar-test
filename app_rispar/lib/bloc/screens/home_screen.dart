@@ -16,9 +16,14 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController textCtrl = TextEditingController();
 
   final formKeyValue = GlobalKey<FormState>();
-
   bool enablePrefixText = false;
   bool enableHintText = true;
+
+  @override
+  void initState() {
+    super.initState();
+    getDataValueSelected();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -217,17 +222,35 @@ class _HomeScreenState extends State<HomeScreen> {
     return false;
   }
 
-  void enableHint() {
+  enableHint() {
     if (textCtrl.text.isEmpty) {
       enableHintText = true;
       enablePrefixText = false;
     }
   }
 
-  void enablePrefix() {
+  enablePrefix() {
     if (textCtrl.text.isEmpty) {
       enablePrefixText = true;
       enableHintText = false;
     }
+  }
+
+  getDataValueSelected() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    double? valueSelected = prefs.getDouble('valueSelected');
+    String valor =
+        UtilBrasilFields.obterReal(valueSelected!, moeda: false, decimal: 0)
+            .toString();
+
+    if (valor.isNotEmpty) {
+      enablePrefix();
+    } else {
+      enableHint();
+    }
+
+    setState(() {
+      textCtrl = TextEditingController(text: valor);
+    });
   }
 }

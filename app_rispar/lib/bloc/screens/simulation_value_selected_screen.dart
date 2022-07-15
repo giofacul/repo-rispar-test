@@ -114,51 +114,55 @@ class _SimulationValueSelectedScreenState
                     textAlign: TextAlign.justify),
               ],
             ),
-            Column(children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      child: Text(
-                        'Continuar sem garantia',
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Theme.of(context).primaryColor),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        child: Text(
+                          'Continuar sem garantia',
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        onPressed: () {
+                          print('VALOR $valueUserData');
+                          // simulationProtectedCollateral(false);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoadingScreen()));
+                        },
                       ),
-                      onPressed: () {
-                        print('VALOR $valueUserData');
-                        // simulationProtectedCollateral(false);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoadingScreen()));
-                      },
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).primaryColor, // Background color
-                  ),
-                  child: const Text(
-                    "Adicionar garantia",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                  ),
-                  onPressed: () {
-                    print('VALOR $valueUserData');
-                    //  simulationProtectedCollateral(true);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoadingScreen()));
-                  },
+                  ],
                 ),
-              ),
-            ]),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                          Theme.of(context).primaryColor, // Background color
+                    ),
+                    child: const Text(
+                      "Adicionar garantia",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    onPressed: () {
+                      print('VALOR $valueUserData');
+                      //  simulationProtectedCollateral(true);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const LoadingScreen()));
+                    },
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
