@@ -22,6 +22,7 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
 
   String valueSelectedReturn = '000.000';
   String? percentSelectedReturn;
+  String? quantitySelectedReturn;
   String? isEmailReturn;
   String? isNameReturn;
   bool? isWarrantyResult;
@@ -157,15 +158,14 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Quantidade de parcelas',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          //TODO QUANTIDADE SHARED
-                          'R\$ [344343]',
-                          style: TextStyle(
+                          '$quantitySelectedReturn',
+                          style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
                         )
@@ -327,6 +327,7 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     double valueSelected = prefs.getDouble('valueSelected') ?? 000.000;
     int? percentValueSelected = prefs.getInt('percentValue');
+    int? quantityValueSelected = prefs.getInt('quantityValue');
     bool? isWarrantySelected = prefs.getBool('isProtectedValue');
     String? emailValue = prefs.getString('emailUser');
     String? nameValue = prefs.getString('nameUser');
@@ -343,6 +344,7 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
     setState(() {
       valueSelectedReturn = valor;
       percentSelectedReturn = percentValueSelected.toString();
+      quantitySelectedReturn = quantityValueSelected.toString();
       isWarrantyResult = isWarrantySelected;
       isEmailReturn = emailValue.toString();
       isNameReturn = nameValue.toString();

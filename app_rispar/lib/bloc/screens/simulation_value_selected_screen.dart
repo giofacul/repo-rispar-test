@@ -177,6 +177,7 @@ class _SimulationValueSelectedScreenState
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isProtectedValue', protected);
     prefs.setInt('percentValue', sliderPercent ?? (sliderPercent = 20));
+    prefs.setInt('quantityValue', sliderQuantity ?? (sliderQuantity = 3));
     await _navigationToNextPage();
   }
 
