@@ -32,244 +32,239 @@ class _LoginScreenState extends State<LoginScreen> {
           currentFocus.unfocus();
         }
       },
-      child: SafeArea(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          body: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            child: SingleChildScrollView(
-              reverse: true,
-              child: Column(
-                children: [
-                  AspectRatio(
-                    aspectRatio: 1.4,
-                    child: Image.asset(
-                      "assets/images/rispar_login.jpeg",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(32),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            const Text(
-                              "Simule ",
-                              style: TextStyle(
-                                  fontSize: 28, fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              "agora ",
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          child: const Text(
-                            "Crédito rápido, fácil e seguro! :)",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          reverse: true,
+          child: Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: Image.asset(
+                  "assets/images/rispar_login.jpeg",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.6,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Row(
                             children: [
-                              SizedBox(
-                                  height: MediaQuery.of(context).size.height *
-                                      0.08),
-                              Row(
-                                children: const [
-                                  Text(
-                                    "Qual seu ",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  Text(
-                                    "nome completo?",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              TextFormField(
-                                textCapitalization: TextCapitalization.words,
-                                controller: nameCTL,
-                                onChanged: (value) {
-                                  setState(() {});
-                                },
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.name,
-                                decoration: InputDecoration(
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor),
-                                  ),
-                                  prefixStyle: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold),
-                                  hintStyle: const TextStyle(
-                                      fontSize: 18, color: Colors.grey),
-                                  hintText: 'Nome Completo',
-                                  suffixIcon: nameCTL.text.isEmpty
-                                      ? null
-                                      : IconButton(
-                                          icon: Icon(
-                                            Icons.close,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                          onPressed: () async {
-                                            final prefs =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            nameCTL.clear();
-                                            prefs.setString('nameUser', '');
-                                            setState(() {});
-                                          },
-                                        ),
-                                ),
-                                validator: (value) {
-                                  if (!value!.contains(RegExp(
-                                      r"^([a-zA-Z]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)"))) {
-                                    return 'Preencha o nome corretamente';
-                                  }
-
-                                  return null;
-                                },
+                              const Text(
+                                "Simule ",
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                                    fontSize: 24, fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              Row(
-                                children: const [
-                                  Text(
-                                    "E seu ",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  Text(
-                                    "e-mail?",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              TextFormField(
-                                inputFormatters: [
-                                  LowerCaseTextFormatter(),
-                                ],
-                                textCapitalization: TextCapitalization.none,
-                                controller: emailCTL,
-                                onChanged: (value) {
-                                  setState(() {});
-                                },
-                                textAlign: TextAlign.start,
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                  enabledBorder: const UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Theme.of(context).primaryColor),
-                                  ),
-                                  prefixStyle: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold),
-                                  hintStyle: const TextStyle(
-                                      fontSize: 18, color: Colors.grey),
-                                  hintText: 'seuemail@email.com',
-                                  suffixIcon: emailCTL.text.isEmpty
-                                      ? null
-                                      : IconButton(
-                                          icon: Icon(
-                                            Icons.close,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                          onPressed: () async {
-                                            final prefs =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            emailCTL.clear();
-                                            prefs.setString('emailUser', '');
-                                            setState(() {});
-                                          },
-                                        ),
-                                ),
-                                validator: (value) {
-                                  if (!EmailValidator.validate(emailCTL.text)) {
-                                    return 'Preencha o email corretamente';
-                                  }
-                                  return null;
-                                },
+                              Text(
+                                "agora ",
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  color: Theme.of(context).primaryColor,
-                                ),
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                        ),
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.15),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              primary: enableButton() == true
-                                  ? Theme.of(context)
-                                      .primaryColor
-                                      .withOpacity(0.3)
-                                  : Theme.of(context)
-                                      .primaryColor, // Background color
-                            ),
+                          const SizedBox(height: 10),
+                          Container(
+                            alignment: Alignment.centerLeft,
                             child: const Text(
-                              "Continuar",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
+                              "Crédito rápido, fácil e seguro! :)",
+                              style: TextStyle(fontSize: 14),
                             ),
-                            onPressed: () async {
-                              final prefs =
-                                  await SharedPreferences.getInstance();
-                              if (_formKey.currentState!.validate()) {
-                                prefs.setString('nameUser', nameCTL.text);
-                                prefs.setString('emailUser', emailCTL.text);
-                                prefs.setBool('isLogged', true);
-                                if (!mounted) return;
-                                Navigator.pushNamed(context, '/home_screen');
-                              }
-                            },
                           ),
+                        ],
+                      ),
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: const [
+                                Text(
+                                  "Qual seu ",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                Text(
+                                  "nome completo?",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              textCapitalization: TextCapitalization.words,
+                              controller: nameCTL,
+                              onChanged: (value) {
+                                setState(() {});
+                              },
+                              textAlign: TextAlign.start,
+                              keyboardType: TextInputType.name,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                hintStyle: const TextStyle(
+                                    fontSize: 14, color: Colors.grey),
+                                hintText: 'Nome Completo',
+                                suffixIconConstraints: const BoxConstraints(
+                                    maxHeight: 30, minWidth: 33),
+                                suffixIcon: nameCTL.text.isEmpty
+                                    ? null
+                                    : IconButton(
+                                        icon: Icon(
+                                          Icons.close,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        onPressed: () async {
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          nameCTL.clear();
+                                          prefs.setString('nameUser', '');
+                                          setState(() {});
+                                        },
+                                      ),
+                              ),
+                              validator: (value) {
+                                if (!value!.contains(RegExp(
+                                    r"^([a-zA-Z]{1,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{1,}\s?([a-zA-Z]{1,})?)"))) {
+                                  return 'Preencha o nome corretamente';
+                                }
+                                return null;
+                              },
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Row(
+                              children: const [
+                                Text(
+                                  "E seu ",
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                Text(
+                                  "e-mail?",
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            TextFormField(
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              inputFormatters: [
+                                LowerCaseTextFormatter(),
+                              ],
+                              textCapitalization: TextCapitalization.none,
+                              controller: emailCTL,
+                              onChanged: (value) {
+                                setState(() {});
+                              },
+                              textAlign: TextAlign.start,
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(
+                                isDense: true,
+                                enabledBorder: const UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.grey),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                hintStyle: const TextStyle(
+                                    fontSize: 14, color: Colors.grey),
+                                hintText: 'seuemail@email.com',
+                                suffixIconConstraints: const BoxConstraints(
+                                    maxHeight: 30, minWidth: 33),
+                                suffixIcon: emailCTL.text.isEmpty
+                                    ? null
+                                    : IconButton(
+                                        icon: Icon(
+                                          Icons.close,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        onPressed: () async {
+                                          final prefs = await SharedPreferences
+                                              .getInstance();
+                                          emailCTL.clear();
+                                          prefs.setString('emailUser', '');
+                                          setState(() {});
+                                        },
+                                      ),
+                              ),
+                              validator: (value) {
+                                if (!EmailValidator.validate(emailCTL.text)) {
+                                  return 'Preencha o email corretamente';
+                                }
+                                return null;
+                              },
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).viewInsets.bottom),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: enableButton() == true
+                                ? Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.3)
+                                : Theme.of(context).primaryColor,
+                          ),
+                          child: const Text(
+                            "Continuar",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          onPressed: () async {
+                            final prefs = await SharedPreferences.getInstance();
+                            if (_formKey.currentState!.validate()) {
+                              prefs.setString('nameUser', nameCTL.text);
+                              prefs.setString('emailUser', emailCTL.text);
+                              prefs.setBool('isLogged', true);
+                              if (!mounted) return;
+                              Navigator.pushNamed(context, '/home_screen');
+                            }
+                          },
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+              ),
+            ],
           ),
         ),
       ),
@@ -279,7 +274,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool? enableButton() {
     if (nameCTL.text.isEmpty ||
         !nameCTL.text.contains(RegExp(
-            r"^([a-zA-Z]{2,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{2,}\s?([a-zA-Z]{1,})?)")) ||
+            r"^([a-zA-Z]{1,}\s[a-zA-z]{1,}'?-?[a-zA-Z]{1,}\s?([a-zA-Z]{1,})?)")) ||
         emailCTL.text.isEmpty ||
         !EmailValidator.validate(emailCTL.text)) {
       return true;

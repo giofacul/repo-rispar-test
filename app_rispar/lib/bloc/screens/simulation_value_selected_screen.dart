@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:app_rispar/bloc/helpers/user_solicitation_helper.dart';
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/loading_screen.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_percent.dart';
@@ -7,7 +5,6 @@ import 'package:app_rispar/bloc/screens/slider_shape_quantity.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class SimulationValueSelectedScreen extends StatefulWidget {
   const SimulationValueSelectedScreen({Key? key}) : super(key: key);
@@ -42,97 +39,107 @@ class _SimulationValueSelectedScreenState
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Flexible(
-              child: Text(
-                'Valor escolhido',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Flexible(
-              child: Text(
-                'R\$ ${UtilBrasilFields.obterReal(valueUserData, moeda: false, decimal: 0)}',
-                style: TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            // const SizedBox(height: 24),
-            Flexible(
-              child: FittedBox(
-                child: Row(
-                  children: const [
-                    Text(
-                      "Escolha a ",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Text(
-                      "quantidade de parcelas",
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Valor escolhido',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-              ),
+                Text(
+                  'R\$ ${UtilBrasilFields.obterReal(valueUserData, moeda: false, decimal: 0)}',
+                  style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor),
+                  textAlign: TextAlign.left,
+                ),
+              ],
             ),
-            const SizedBox(height: 80, child: SliderShapeQuantity()),
-            Flexible(
-              child: Row(
-                children: const [
-                  Text(
-                    "Escolha o ",
-                    style: TextStyle(fontSize: 20),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  child: Row(
+                    children: const [
+                      Text(
+                        "Escolha a ",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        "quantidade de parcelas",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "percentual de garantia",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SliderShapeQuantity(),
+                const SizedBox(height: 10),
+                FittedBox(
+                  child: Row(
+                    children: const [
+                      Text(
+                        "Escolha o ",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        "percentual de garantia",
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                const SliderShapePercent(),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Garantia protegida',
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).primaryColor),
+                  textAlign: TextAlign.left,
+                ),
+                const SizedBox(height: 10),
+                const Text(
+                    "Bitcoin caiu? Fique tranquilo! Na garantia protegida,"
+                    " você não recebe chamada de margem e não é liquidado.",
+                    maxLines: 3,
+                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                    textAlign: TextAlign.justify),
+              ],
+            ),
+            Column(children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      child: Text(
+                        'Continuar sem garantia',
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Theme.of(context).primaryColor),
+                      ),
+                      onPressed: () {
+                        print('VALOR $valueUserData');
+                        // simulationProtectedCollateral(false);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoadingScreen()));
+                      },
+                    ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 80, child: SliderShapePercent()),
-            Flexible(
-              child: Text(
-                'Garantia protegida',
-                style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.left,
-              ),
-            ),
-            const Expanded(
-              child: Text(
-                  "Bitcoin caiu? Fique tranquilo! Na garantia protegida,"
-                  " você não recebe chamada de margem e não é liquidado.",
-                  maxLines: 3,
-                  style: TextStyle(color: Colors.black54, fontSize: 18),
-                  textAlign: TextAlign.justify),
-            ),
-            Flexible(
-              child: Center(
-                child: TextButton(
-                  child: Text(
-                    'Continuar sem garantia',
-                    style: TextStyle(
-                        fontSize: 18, color: Theme.of(context).primaryColor),
-                  ),
-                  onPressed: () {
-                    print('VALOR $valueUserData');
-                    // simulationProtectedCollateral(false);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const LoadingScreen()));
-                  },
-                ),
-              ),
-            ),
-            Flexible(
-              child: SizedBox(
+              SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 60,
+                height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: Theme.of(context).primaryColor, // Background color
@@ -151,7 +158,7 @@ class _SimulationValueSelectedScreenState
                   },
                 ),
               ),
-            ),
+            ]),
           ],
         ),
       ),

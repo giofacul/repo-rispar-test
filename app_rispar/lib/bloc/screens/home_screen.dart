@@ -38,61 +38,61 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Padding(
           padding: const EdgeInsets.all(32),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.only(left: 10.0, right: 30.0, top: 10.0),
-                child: Column(
-                  children: [
-                    FittedBox(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "De quanto ",
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 32,
-                                fontWeight: FontWeight.bold),
+              Column(
+                children: [
+                  FittedBox(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "De quanto ",
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
-                          const Text(
-                            "você precisa?",
-                            style: TextStyle(
-                                fontSize: 32, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      ),
+                        ),
+                        const Text(
+                          "você precisa?",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    FittedBox(
-                      child: Row(
-                        children: const [
-                          Text("Insira um valor entre ",
-                              style: TextStyle(
-                                fontSize: 18,
-                              )),
-                          Text("R\$500",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              )),
-                          Text(" a ",
-                              style: TextStyle(
-                                fontSize: 18,
-                              )),
-                          Text(
-                            "R\$300.000",
+                  ),
+                  const SizedBox(height: 10),
+                  FittedBox(
+                    child: Row(
+                      children: const [
+                        Text(
+                          "Insira um valor entre ",
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text("R\$500",
                             style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
-                            ),
+                            )),
+                        Text(" a ",
+                            style: TextStyle(
+                              fontSize: 14,
+                            )),
+                        Text(
+                          "R\$300.000",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Form(
                 key: formKeyValue,
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           fontSize: 32,
                           fontWeight: FontWeight.bold),
                       hintStyle: const TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         color: Colors.grey,
                       ),
                       hintText: textCtrl.text.isEmpty
@@ -170,12 +170,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 60,
+                height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     primary: enableButton() == true
                         ? Theme.of(context).primaryColor.withOpacity(0.3)
-                        : Theme.of(context).primaryColor, // Background color
+                        : Theme.of(context).primaryColor,
                   ),
                   child: const Text(
                     "Continuar",
