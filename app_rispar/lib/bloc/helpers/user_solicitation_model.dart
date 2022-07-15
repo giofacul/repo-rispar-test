@@ -16,8 +16,6 @@ class UserSolicitationModel {
     valueFees = json['extra']['raw_info']['followers'];
     //IOF - FOLLOWING
     valueIOF = json['extra']['raw_info']['following'];
-    //IOF - FOLLOWING
-    valueIOF = json['extra']['raw_info']['following'];
 
     print('VALUE IOF  NA MODEL $valueWarranty');
   }

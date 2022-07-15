@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/home_screen.dart';
+import 'package:app_rispar/bloc/screens/loading_screen.dart';
+import 'package:app_rispar/bloc/screens/login_screen.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -40,336 +42,358 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
     final response = await http
         .get(Uri.parse('https://random-data-api.com/api/omniauth/github_get'));
     if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
       return UserSolicitationModel.fromJson(jsonDecode(response.body));
     } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
       throw Exception('Failed to load album');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: const CustomTopAppBar(
-        valueProgressAppBar: 1,
-        isResultPageReturn: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(32.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const FittedBox(
-                child: Text(
-                  "Resultado da simulação",
-                  style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+    return FutureBuilder(
+      future: futureApi,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Scaffold(
+            backgroundColor: Colors.white,
+            appBar: const CustomTopAppBar(
+              valueProgressAppBar: 1,
+              isResultPageReturn: true,
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const FittedBox(
+                      child: Text(
+                        "Resultado da simulação",
+                        style: TextStyle(fontSize: 32, fontWeight: FontWeight
+                            .bold),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Valor Escolhido',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                'R\$ $valueSelectedReturn',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Garantia',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              FutureBuilder<UserSolicitationModel>(
+                                future: futureApi,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data!.valueIOF != null
+                                          ? 'β ${(int.parse(
+                                          snapshot.data!.valueWarranty!) /
+                                          10000000).toString().replaceAll(
+                                          '.', ',')}'
+                                          : 'Não Retornado',
+                                      style: const TextStyle(
+                                          color: Colors.black38,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return const Text('ERROU');
+                                  }
+
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Taxa de juros',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              FutureBuilder<UserSolicitationModel>(
+                                future: futureApi,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data!.valueFees != null
+                                          ? '${(snapshot.data!.valueFees! /
+                                          1000).toString().replaceAll(
+                                          '.', ',')}% a.m'
+                                          : 'Não Retornado',
+                                      style: const TextStyle(
+                                          color: Colors.black38,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return const Text('ERROU');
+                                  }
+
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Percentual de garantia',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '$percentSelectedReturn%',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Quantidade de parcelas',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                '$quantitySelectedReturn',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Primeiro vencimento',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                dataValidateResult != null
+                                    ? '$dataValidateResult'
+                                    : 'Data inválida',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'IOF',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              FutureBuilder<UserSolicitationModel>(
+                                future: futureApi,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data!.valueIOF != null
+                                          ? 'R\$ ${snapshot.data!.valueIOF!}'
+                                          : 'Não Retornado',
+                                      style: const TextStyle(
+                                          color: Colors.black38,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return const Text('ERROU');
+                                  }
+
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Nome do usuário',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                isNameReturn != null
+                                    ? '$isNameReturn'
+                                    : 'Nome Inválido',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Email do usuário',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                isEmailReturn != null
+                                    ? '$isEmailReturn'
+                                    : 'Email Inválido',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'CET anual',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              FutureBuilder<UserSolicitationModel>(
+                                future: futureApi,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data!.valueIOF != null
+                                          ? 'R\$ ${(int.parse(
+                                          snapshot.data!.valueWarranty!))
+                                          .toString()
+                                          .replaceAll('.', ',')}'
+                                          : 'Não Retornado',
+                                      style: const TextStyle(
+                                          color: Colors.black38,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return const Text('ERROU');
+                                  }
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'Tipo da Simulação',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                isWarrantyResult == true
+                                    ? "Com Garantia"
+                                    : 'Sem Garantia',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 12),
+                      child: SizedBox(
+                        width: MediaQuery
+                            .of(context)
+                            .size
+                            .width * 1,
+                        height: 60,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary:
+                            Theme
+                                .of(context)
+                                .primaryColor, // Background color
+                          ),
+                          child: const Text(
+                            "Nova simulação",
+                            style:
+                            TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const HomeScreen()));
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Valor Escolhido',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'R\$ $valueSelectedReturn',
-                          style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Garantia',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        FutureBuilder<UserSolicitationModel>(
-                          future: futureApi,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(
-                                snapshot.data!.valueIOF != null
-                                    ? 'β ${(int.parse(snapshot.data!.valueWarranty!) / 10000000).toString().replaceAll('.', ',')}'
-                                    : 'Não Retornado',
-                                style: const TextStyle(
-                                    color: Colors.black38,
-                                    fontWeight: FontWeight.bold),
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Text('ERROU');
-                            }
-
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Taxa de juros',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        FutureBuilder<UserSolicitationModel>(
-                          future: futureApi,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(
-                                snapshot.data!.valueFees != null
-                                    ? '${(snapshot.data!.valueFees! / 1000).toString().replaceAll('.', ',')}% a.m'
-                                    : 'Não Retornado',
-                                style: const TextStyle(
-                                    color: Colors.black38,
-                                    fontWeight: FontWeight.bold),
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Text('ERROU');
-                            }
-
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Percentual de garantia',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '$percentSelectedReturn%',
-                          style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Quantidade de parcelas',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '$quantitySelectedReturn',
-                          style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Primeiro vencimento',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          dataValidateResult != null
-                              ? '$dataValidateResult'
-                              : 'Data inválida',
-                          style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'IOF',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        FutureBuilder<UserSolicitationModel>(
-                          future: futureApi,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(
-                                snapshot.data!.valueIOF != null
-                                    ? 'R\$ ${snapshot.data!.valueIOF!}'
-                                    : 'Não Retornado',
-                                style: const TextStyle(
-                                    color: Colors.black38,
-                                    fontWeight: FontWeight.bold),
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Text('ERROU');
-                            }
-
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Nome do usuário',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          isNameReturn != null
-                              ? '$isNameReturn'
-                              : 'Nome Inválido',
-                          style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Email do usuário',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          isEmailReturn != null
-                              ? '$isEmailReturn'
-                              : 'Email Inválido',
-                          style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'CET anual',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        FutureBuilder<UserSolicitationModel>(
-                          future: futureApi,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              return Text(
-                                snapshot.data!.valueIOF != null
-                                    ? 'R\$ ${(int.parse(snapshot.data!.valueWarranty!)).toString().replaceAll('.', ',')}'
-                                    : 'Não Retornado',
-                                style: const TextStyle(
-                                    color: Colors.black38,
-                                    fontWeight: FontWeight.bold),
-                              );
-                            } else if (snapshot.hasError) {
-                              return const Text('ERROU');
-                            }
-                            return const CircularProgressIndicator();
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Tipo da Simulação',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          isWarrantyResult == true
-                              ? "Com Garantia"
-                              : 'Sem Garantia',
-                          style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 1,
-                  height: 60,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary:
-                          Theme.of(context).primaryColor, // Background color
-                    ),
-                    child: const Text(
-                      "Nova simulação",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeScreen()));
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        } else if (snapshot.hasError) {
+          return const Text('ERROU');
+        }  else {
+          return const LoadingScreen();
+        }
+        },
     );
   }
 

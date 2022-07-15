@@ -1,13 +1,12 @@
-import 'dart:convert';
-import 'package:app_rispar/bloc/helpers/user_solicitation_model.dart';
+
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/loading_screen.dart';
+import 'package:app_rispar/bloc/screens/simulation_result_screen.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_percent.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_quantity.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class SimulationValueSelectedScreen extends StatefulWidget {
   const SimulationValueSelectedScreen({Key? key}) : super(key: key);
@@ -30,6 +29,7 @@ class _SimulationValueSelectedScreenState
   void initState() {
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,10 +135,6 @@ class _SimulationValueSelectedScreenState
                   onPressed: () {
                     print('VALOR $valueUserData');
                     simulationProtectedCollateral(false);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const LoadingScreen()));
                   },
                 ),
               ),
@@ -158,10 +154,6 @@ class _SimulationValueSelectedScreenState
                   onPressed: () {
                     print('VALOR $valueUserData');
                     simulationProtectedCollateral(true);
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => const LoadingScreen()));
                   },
                 ),
               ),
@@ -182,6 +174,6 @@ class _SimulationValueSelectedScreenState
 
   _navigationToNextPage() {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => const LoadingScreen()));
+        MaterialPageRoute(builder: (context) => const SimulationResultScreen()));
   }
 }

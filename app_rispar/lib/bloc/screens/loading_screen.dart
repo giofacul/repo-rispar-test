@@ -63,7 +63,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     );
   }
   startSplashScreenTimer() async{
-    const Duration duration = Duration(seconds: 2);
+    const Duration duration = Duration(seconds: 4);
     return Timer(duration, navigationToNextPage);
   }
 
