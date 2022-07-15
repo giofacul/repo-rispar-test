@@ -18,7 +18,6 @@ class SimulationResultScreen extends StatefulWidget {
 }
 
 class _SimulationResultScreenState extends State<SimulationResultScreen> {
-  // UserSolicitationModel? userSolicitationModel;
 
   String valueSelectedReturn = '000.000';
   String? percentSelectedReturn;
@@ -28,13 +27,27 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
   bool? isWarrantyResult;
   String? dataValidateResult;
 
- late Future<UserSolicitationModel>? futureAlbum;
+  late Future<UserSolicitationModel>? futureApi;
 
   @override
   void initState() {
     super.initState();
     getDataValueSelected();
-    futureAlbum = fetchAlbum();
+    futureApi = fetchApi();
+  }
+
+  Future<UserSolicitationModel> fetchApi() async {
+    final response = await http
+        .get(Uri.parse('https://random-data-api.com/api/omniauth/github_get'));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return UserSolicitationModel.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   }
 
   @override
@@ -82,18 +95,30 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'Garantia',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          //TODO DADOS GARANTIA WARRANTY
-                          'R\$ [344343]',
-                          style: TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
+                        FutureBuilder<UserSolicitationModel>(
+                          future: futureApi,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!.valueIOF != null
+                                    ? 'β ${(int.parse(snapshot.data!.valueWarranty!) / 10000000).toString().replaceAll('.', ',')}'
+                                    : 'Não Retornado',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            } else if (snapshot.hasError) {
+                              return const Text('ERROU');
+                            }
+
+                            return const CircularProgressIndicator();
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -108,12 +133,16 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         FutureBuilder<UserSolicitationModel>(
-                          future: futureAlbum,
+                          future: futureApi,
                           builder: (context, snapshot) {
-                          print('FUTURE juros RETORNO ${snapshot.data!.valueWarranty}');
                             if (snapshot.hasData) {
-                              return Text(snapshot.data!.valueWarranty ?? 'Não Retornado',
-                                style: const TextStyle(fontSize: 12, color: Colors.black38, fontWeight: FontWeight.bold),
+                              return Text(
+                                snapshot.data!.valueFees != null
+                                    ? '${(snapshot.data!.valueFees! / 1000).toString().replaceAll('.', ',')}% a.m'
+                                    : 'Não Retornado',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
                               );
                             } else if (snapshot.hasError) {
                               return const Text('ERROU');
@@ -122,15 +151,6 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                             return const CircularProgressIndicator();
                           },
                         ),
-                        // Text(
-                        //   //TODO TAXA DE JUROS E DIVIDIR POR 100, PORCENTAGEM
-                        //   userSolicitationModel != null
-                        //       ? '${userSolicitationModel?.fees}%'
-                        //       : '',
-                        //   style: const TextStyle(
-                        //       color: Colors.black38,
-                        //       fontWeight: FontWeight.bold),
-                        // )
                       ],
                     ),
                   ),
@@ -177,35 +197,16 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children:  [
+                      children: [
                         const Text(
                           'Primeiro vencimento',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          dataValidateResult != null ?
-                          '$dataValidateResult' : 'Data inválida',
+                          dataValidateResult != null
+                              ? '$dataValidateResult'
+                              : 'Data inválida',
                           style: const TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'IOF',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          //TODO VALOR DE FOLOWERS
-                          'R\$ [344343]',
-                          style: TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
                         )
@@ -219,11 +220,45 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
+                          'IOF',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        FutureBuilder<UserSolicitationModel>(
+                          future: futureApi,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!.valueIOF != null
+                                    ? 'R\$ ${snapshot.data!.valueIOF!}'
+                                    : 'Não Retornado',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            } else if (snapshot.hasError) {
+                              return const Text('ERROU');
+                            }
+
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(color: Colors.grey),
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
                           'Nome do usuário',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(isNameReturn != null ?
-                        '$isNameReturn' : 'Nome Inválido',
+                        Text(
+                          isNameReturn != null
+                              ? '$isNameReturn'
+                              : 'Nome Inválido',
                           style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
@@ -241,8 +276,10 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           'Email do usuário',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text( isEmailReturn != null ?
-                          '$isEmailReturn' : 'Email Inválido',
+                        Text(
+                          isEmailReturn != null
+                              ? '$isEmailReturn'
+                              : 'Email Inválido',
                           style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
@@ -255,17 +292,29 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                     padding: const EdgeInsets.all(4),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
+                      children: [
+                        const Text(
                           'CET anual',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          'R\$ [344343]',
-                          style: TextStyle(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.bold),
-                        )
+                        FutureBuilder<UserSolicitationModel>(
+                          future: futureApi,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!.valueIOF != null
+                                    ? 'R\$ ${(int.parse(snapshot.data!.valueWarranty!)).toString().replaceAll('.', ',')}'
+                                    : 'Não Retornado',
+                                style: const TextStyle(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.bold),
+                              );
+                            } else if (snapshot.hasError) {
+                              return const Text('ERROU');
+                            }
+                            return const CircularProgressIndicator();
+                          },
+                        ),
                       ],
                     ),
                   ),
@@ -280,8 +329,9 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          isWarrantyResult == true ? "Com Garantia" :
-                          'Sem Garantia',
+                          isWarrantyResult == true
+                              ? "Com Garantia"
+                              : 'Sem Garantia',
                           style: const TextStyle(
                               color: Colors.black38,
                               fontWeight: FontWeight.bold),
@@ -349,23 +399,6 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
       isEmailReturn = emailValue.toString();
       isNameReturn = nameValue.toString();
       dataValidateResult = formattedDate;
-      print("VALOR PROTEGIDO? $isWarrantyResult");
     });
-  }
-
-  Future<UserSolicitationModel> fetchAlbum() async {
-    final response = await http
-        .get(Uri.parse('https://random-data-api.com/api/omniauth/github_get'));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      print("RETORNO DO BODY NA TELA DE RESULTADOS ${response.body}");
-      return UserSolicitationModel.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load album');
-    }
   }
 }
