@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/home_screen.dart';
 import 'package:app_rispar/bloc/screens/loading_screen.dart';
-import 'package:app_rispar/bloc/screens/login_screen.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -38,16 +37,6 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
     futureApi = fetchApi();
   }
 
-  Future<UserSolicitationModel> fetchApi() async {
-    final response = await http
-        .get(Uri.parse('https://random-data-api.com/api/omniauth/github_get'));
-    if (response.statusCode == 200) {
-      return UserSolicitationModel.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load album');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -61,7 +50,7 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
               isResultPageReturn: true,
             ),
             body: Padding(
-              padding: const EdgeInsets.all(32.0),
+              padding: const EdgeInsets.only(left: 32.0, right: 32, bottom: 32, top: 8),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -156,6 +145,40 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                                     return const Text('ERROU');
                                   }
 
+                                  return const CircularProgressIndicator();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(color: Colors.grey),
+                        Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'CET anual',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              FutureBuilder<UserSolicitationModel>(
+                                future: futureApi,
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    return Text(
+                                      snapshot.data!.valueCET != null
+                                          ? 'R\$ ${(int.parse((
+                                          snapshot.data!.valueCET!).toString()))
+                                          .toString()
+                                          .replaceAll('.', ',')}'
+                                          : 'Não Retornado',
+                                      style: const TextStyle(
+                                          color: Colors.black38,
+                                          fontWeight: FontWeight.bold),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    return const Text('ERROU');
+                                  }
                                   return const CircularProgressIndicator();
                                 },
                               ),
@@ -302,40 +325,6 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text(
-                                'CET anual',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              FutureBuilder<UserSolicitationModel>(
-                                future: futureApi,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    return Text(
-                                      snapshot.data!.valueIOF != null
-                                          ? 'R\$ ${(int.parse(
-                                          snapshot.data!.valueWarranty!))
-                                          .toString()
-                                          .replaceAll('.', ',')}'
-                                          : 'Não Retornado',
-                                      style: const TextStyle(
-                                          color: Colors.black38,
-                                          fontWeight: FontWeight.bold),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return const Text('ERROU');
-                                  }
-                                  return const CircularProgressIndicator();
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(color: Colors.grey),
-                        Padding(
-                          padding: const EdgeInsets.all(4),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
                                 'Tipo da Simulação',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
@@ -424,5 +413,16 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
       isNameReturn = nameValue.toString();
       dataValidateResult = formattedDate;
     });
+  }
+
+  Future<UserSolicitationModel> fetchApi() async {
+    final response = await http
+        .get(Uri.parse('https://random-data-api.com/api/omniauth/github_get'));
+    if (response.statusCode == 200) {
+      print('response ${response.body}');
+      return UserSolicitationModel.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load album');
+    }
   }
 }
