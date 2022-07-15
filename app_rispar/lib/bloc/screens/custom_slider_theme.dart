@@ -7,8 +7,8 @@ class CustomSliderTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double thumbRadius = 14;
-    const double marksRadius = 8;
+    const double thumbRadius = 10;
+    const double marksRadius = 6;
 
     final activeColor = Theme.of(context).primaryColor;
     const inactiveCoolor = Colors.grey;

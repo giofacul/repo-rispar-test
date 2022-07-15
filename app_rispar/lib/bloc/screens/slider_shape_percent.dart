@@ -24,49 +24,48 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
     final double max = labels.length - 1.0;
     final divisions = labels.length - 1;
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Slider(
-            value: indexSlider.toDouble(),
-            min: min,
-            max: max,
-            divisions: divisions,
-            label: labels[indexSlider],
-            onChanged: (value) => setState(() {
-              indexSlider = value.toInt();
-              widget.onChangedPercent(indexSlider);
-              switch (indexSlider) {
-                case 1:
-                  widget.onChangedPercent(35);
-                  break;
-                case 2:
-                  widget.onChangedPercent(50);
-                  break;
-                default:
-                  widget.onChangedPercent(20);
-                  break;
-              }
-            }),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: Utils.modelBuilder(labels, (index, model) {
-                  const selectedColor = Colors.black;
-                  final unselectedColor = Colors.black.withOpacity(0.3);
-                  final isSelected = index <= indexSlider;
-                  final color = isSelected ? selectedColor : unselectedColor;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Slider(
+          value: indexSlider.toDouble(),
+          min: min,
+          max: max,
+          divisions: divisions,
+          label: labels[indexSlider],
+          onChanged: (value) => setState(() {
+            indexSlider = value.toInt();
+            widget.onChangedPercent(indexSlider);
+            switch (indexSlider) {
+              case 1:
+                widget.onChangedPercent(35);
+                break;
+              case 2:
+                widget.onChangedPercent(50);
+                break;
+              default:
+                widget.onChangedPercent(20);
+                break;
+            }
+          }),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: Utils.modelBuilder(
+            labels,
+            (index, model) {
+              const selectedColor = Colors.black;
+              final unselectedColor = Colors.black.withOpacity(0.3);
+              final isSelected = index <= indexSlider;
+              final color = isSelected ? selectedColor : unselectedColor;
 
-                  return buildLabel(
-                      label: model.toString(), color: color, width: 40);
-                })),
+              return buildLabel(
+                  label: model.toString(), color: color, width: 40);
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -81,7 +80,7 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
           label,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ).copyWith(color: color),
         ),
