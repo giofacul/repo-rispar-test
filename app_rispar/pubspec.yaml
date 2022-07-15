@@ -42,11 +42,12 @@ dependencies:
   flutter_launcher_icons: ^0.9.3
   intl: ^0.17.0
   brasil_fields: ^1.4.5
+  mockito: ^5.2.0
+  test: ^1.5.1
 
 
 
 dev_dependencies:
-  mockito: ^5.2.0
   flutter_test:
     sdk: flutter
 

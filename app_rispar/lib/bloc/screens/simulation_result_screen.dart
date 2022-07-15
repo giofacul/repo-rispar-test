@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/home_screen.dart';
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../helpers/user_solicitation_model.dart';
 
 class SimulationResultScreen extends StatefulWidget {
   const SimulationResultScreen({Key? key}) : super(key: key);
@@ -12,15 +17,18 @@ class SimulationResultScreen extends StatefulWidget {
 }
 
 class _SimulationResultScreenState extends State<SimulationResultScreen> {
+  // UserSolicitationModel? userSolicitationModel;
+
   String valueSelectedReturn = '000.000';
   String percentSelectedReturn = '20';
 
-  //TODO TRAZER DADOS DE RETORNO DA API
+ late Future<UserSolicitationModel>? futureAlbum;
 
   @override
   void initState() {
     super.initState();
     getDataValueSelected();
+    futureAlbum = fetchAlbum();
   }
 
   @override
@@ -56,8 +64,9 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                         ),
                         Text(
                           'R\$ $valueSelectedReturn',
-                          style:  const TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -73,9 +82,67 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
+                          //TODO DADOS GARANTIA WARRANTY
                           'R\$ [344343]',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                  ),
+                  const Divider(color: Colors.grey),
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Taxa de juros',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        FutureBuilder<UserSolicitationModel>(
+                          future: futureAlbum,
+                          builder: (context, snapshot) {
+                          print('FUTURE juros RETORNO ${snapshot.data!.valueWarranty}');
+                            if (snapshot.hasData) {
+                              return Text(snapshot.data!.valueWarranty ?? '',
+                                style: const TextStyle(fontSize: 12, color: Colors.cyan),
+                              );
+                            } else if (snapshot.hasError) {
+                              return const Text('ERROU');
+                            }
+
+                            return const CircularProgressIndicator();
+                          },
+                        ),
+                        // Text(
+                        //   //TODO TAXA DE JUROS E DIVIDIR POR 100, PORCENTAGEM
+                        //   userSolicitationModel != null
+                        //       ? '${userSolicitationModel?.fees}%'
+                        //       : '',
+                        //   style: const TextStyle(
+                        //       color: Colors.black38,
+                        //       fontWeight: FontWeight.bold),
+                        // )
+                      ],
+                    ),
+                  ),
+                  const Divider(color: Colors.grey),
+                  Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Percentual de garantia',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '$percentSelectedReturn%',
+                          style: const TextStyle(
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -87,31 +154,15 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Text(
-                          'Taxa de juros',
+                          'Quantidade de parcelas',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
+                          //TODO QUANTIDADE SHARED
                           'R\$ [344343]',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                       const Text(
-                          'Percentual de garantia',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '$percentSelectedReturn%',
-                          style: const TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -127,9 +178,11 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'R\$ [344343]',
+                          //TODO CALCULAR DATA ATUAL + 30 DIAS
+                          '30/03/3000',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -145,9 +198,11 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
+                          //TODO VALOR DE FOLOWERS
                           'R\$ [344343]',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -159,13 +214,15 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Text(
-                          'Tarifa da plataforma',
+                          'Nome do usuário',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
+                          //TODO RETORNAR SHARED NOME
                           'R\$ [344343]',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -177,31 +234,15 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Text(
-                          'Total financiado',
+                          'Email do usuário',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
+                          //TODO SHARED EMAIL
                           'R\$ [344343]',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
-                        )
-                      ],
-                    ),
-                  ),
-                  const Divider(color: Colors.grey),
-                  Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Text(
-                          'CET mensal',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'R\$ [344343]',
-                          style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -219,7 +260,8 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                         Text(
                           'R\$ [344343]',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -231,13 +273,15 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Text(
-                          'Cotação do BTC',
+                          'Tipo da Simulação',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         Text(
-                          'R\$ [344343]',
+                          //TODO COM OU SEM GARANTIA
+                          'COM GARANTIA',
                           style: TextStyle(
-                              color: Colors.black38, fontWeight: FontWeight.bold),
+                              color: Colors.black38,
+                              fontWeight: FontWeight.bold),
                         )
                       ],
                     ),
@@ -252,11 +296,13 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                   height: 60,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).primaryColor, // Background color
+                      primary:
+                          Theme.of(context).primaryColor, // Background color
                     ),
                     child: const Text(
                       "Nova simulação",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -278,14 +324,29 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     double valueSelected = prefs.getDouble('valueSelected') ?? 000.000;
     String valor =
-    UtilBrasilFields.obterReal(valueSelected, moeda: false, decimal: 0)
-        .toString();
+        UtilBrasilFields.obterReal(valueSelected, moeda: false, decimal: 0)
+            .toString();
     int percentValueSelected = prefs.getInt('percentValue') ?? 20;
-
 
     setState(() {
       valueSelectedReturn = valor;
       percentSelectedReturn = percentValueSelected.toString();
     });
+  }
+
+  Future<UserSolicitationModel> fetchAlbum() async {
+    final response = await http
+        .get(Uri.parse('https://random-data-api.com/api/omniauth/github_get'));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      print("RETORNO DO BODY NA TELA DE RESULTADOS ${response.body}");
+      return UserSolicitationModel.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
   }
 }

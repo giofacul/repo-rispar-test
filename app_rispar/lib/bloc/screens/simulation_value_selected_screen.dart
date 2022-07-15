@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:app_rispar/bloc/helpers/user_solicitation_helper.dart';
+import 'package:app_rispar/bloc/helpers/user_solicitation_model.dart';
 import 'package:app_rispar/bloc/screens/custom_app_bar.dart';
 import 'package:app_rispar/bloc/screens/loading_screen.dart';
 import 'package:app_rispar/bloc/screens/slider_shape_percent.dart';
@@ -85,7 +85,6 @@ class _SimulationValueSelectedScreenState
                 child: SliderShapeQuantity(
                   onChangedQuantity: (value) {
                     sliderQuantity = value;
-                    print('SLIDER QUANTITY RETURN $sliderQuantity');
                   },
                 )),
             Flexible(
@@ -136,7 +135,7 @@ class _SimulationValueSelectedScreenState
                   ),
                   onPressed: () {
                     print('VALOR $valueUserData');
-                    simulationProtectedCollateral(false);
+                    // simulationProtectedCollateral(false);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -159,7 +158,7 @@ class _SimulationValueSelectedScreenState
                   ),
                   onPressed: () {
                     print('VALOR $valueUserData');
-                    simulationProtectedCollateral(true);
+                    // simulationProtectedCollateral(true);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -174,58 +173,59 @@ class _SimulationValueSelectedScreenState
     );
   }
 
-  simulationProtectedCollateral(bool protected) async {
-    createSimulation(
-        name: nameUserData,
-        email: emailUserData,
-        //PERCENTUAL DE GARANTIA
-        itv: sliderQuantity ?? (sliderQuantity = 3),
-        amount: valueUserData,
-        //PARCELAS
-        term: sliderPercent ?? (sliderPercent = 20),
-        hasProtectedCollateral: protected);
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setInt('percentValue', sliderPercent!);
-
-    print('dados retornados');
-    print('NAME $nameUserData');
-    print('EMAIL $emailUserData');
-    print('VALOR ${valueUserData?.round()}');
-    print('GARANTIA $protected');
-    print('QUANTIDADE $sliderQuantity');
-    print('PARCELAS $sliderPercent');
-  }
-
-  Future<UserSolicitation> createSimulation({
-    String? name,
-    String? email,
-    int? itv,
-    double? amount,
-    int? term,
-    bool? hasProtectedCollateral,
-  }) async {
-    final response = await http.post(
-      Uri.parse('https://api.rispar.com.br/acquisition/simulation'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, dynamic>{
-        'name': name,
-        'email': email,
-        'itv': int,
-        'amount': amount,
-        'term': term,
-        'has_protected_collateral': hasProtectedCollateral
-      }),
-    );
-
-    if (response.statusCode == 201) {
-      return UserSolicitation.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to create album.');
-    }
-  }
+  // simulationProtectedCollateral(bool protected) async {
+  //   createSimulation(
+  //       name: nameUserData,
+  //       email: emailUserData,
+  //       //PERCENTUAL DE GARANTIA
+  //       itv: sliderQuantity ?? (sliderQuantity = 3),
+  //       amount: valueUserData,
+  //       //PARCELAS
+  //       term: sliderPercent ?? (sliderPercent = 20),
+  //       hasProtectedCollateral: protected);
+  //
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setInt('percentValue', sliderPercent!);
+  //
+  //   print('dados retornados');
+  //   print('NAME $nameUserData');
+  //   print('EMAIL $emailUserData');
+  //   print('VALOR ${valueUserData?.round()}');
+  //   print('GARANTIA $protected');
+  //   print('QUANTIDADE $sliderQuantity');
+  //   print('PARCELAS $sliderPercent');
+  // }
+  //
+  // Future<UserSolicitationModel> createSimulation({
+  //   String? name,
+  //   String? email,
+  //   int? itv,
+  //   double? amount,
+  //   int? term,
+  //   bool? hasProtectedCollateral,
+  // }) async {
+    // final response = await http.get(
+    //   Uri.parse('https://random-data-api.com/api/omniauth/github_get'),
+      // headers: <String, String>{
+      //   'Content-Type': 'application/json; charset=UTF-8',
+      // },
+      // body: jsonEncode(<String, dynamic>{
+      //   'name': name,
+      //   'email': email,
+      //   'itv': int,
+      //   'amount': amount,
+      //   'term': term,
+      //   'has_protected_collateral': hasProtectedCollateral
+      // }),
+  //   );
+  //   print('RETORNO DOS DADOS DO RESPONSE BODI ${response.body}');
+  //
+  //   if (response.statusCode == 200) {
+  //     return UserSolicitationModel.fromJson(jsonDecode(response.body));
+  //   } else {
+  //     throw Exception('Failed to create album.');
+  //   }
+  // }
 
   getDataUserToSimulation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
