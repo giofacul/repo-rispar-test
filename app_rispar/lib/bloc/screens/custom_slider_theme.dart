@@ -7,27 +7,28 @@ class CustomSliderTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double thumbRadius = 14;
-    final double marksRadius = 8;
+    const double thumbRadius = 10;
+    const double marksRadius = 6;
 
     final activeColor = Theme.of(context).primaryColor;
-    final inactiveCoolor = Colors.grey;
+    const inactiveCoolor = Colors.grey;
 
     return SliderTheme(
         data: SliderThemeData(
           trackHeight: 4,
 
           //thumb
-          thumbShape: RoundSliderThumbShape(
+          thumbShape: const RoundSliderThumbShape(
             disabledThumbRadius: thumbRadius,
             enabledThumbRadius: thumbRadius,
           ),
-          rangeThumbShape: RoundRangeSliderThumbShape(
+          rangeThumbShape: const RoundRangeSliderThumbShape(
               disabledThumbRadius: thumbRadius,
               enabledThumbRadius: thumbRadius),
 
           //marks
-          tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: marksRadius),
+          tickMarkShape:
+              const RoundSliderTickMarkShape(tickMarkRadius: marksRadius),
 
           //inactive
           inactiveTickMarkColor: inactiveCoolor,
