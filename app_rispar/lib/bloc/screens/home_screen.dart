@@ -27,10 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusScopeNode currentFocus = FocusScope.of(context);
     return GestureDetector(
       onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-
         if (!currentFocus.hasPrimaryFocus) {
           currentFocus.unfocus();
         }
@@ -195,6 +194,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           'valueSelected',
                           double.parse(textCtrl.text
                               .replaceAll(RegExp(r"[^\s\w]"), '')));
+
+                      if (!currentFocus.hasPrimaryFocus) {
+                        currentFocus.unfocus();
+                      }
+
                       if (!mounted) return;
                       Navigator.push(
                           context,
@@ -238,9 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getDataValueSelected() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    double? valueSelected = prefs.getDouble('valueSelected');
+    double valueSelected = prefs.getDouble('valueSelected') ?? 0.0;
     String valor =
-        UtilBrasilFields.obterReal(valueSelected!, moeda: false, decimal: 0)
+        UtilBrasilFields.obterReal(valueSelected, moeda: false, decimal: 0)
             .toString();
 
     if (valor.isNotEmpty) {

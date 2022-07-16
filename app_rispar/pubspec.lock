@@ -176,6 +176,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.3"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> merge-flexible-screens-login
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.6"
+<<<<<<< HEAD
+=======
+>>>>>>> developer
   email_validator:
     dependency: "direct main"
     description:
@@ -183,6 +199,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> developer
+>>>>>>> merge-flexible-screens-login
+>>>>>>> developer
   fake_async:
     dependency: transitive
     description:
@@ -359,6 +381,16 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+<<<<<<< HEAD
+=======
+  mockito:
+    dependency: "direct dev"
+    description:
+      name: mockito
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.2.0"
+>>>>>>> developer
   nested:
     dependency: transitive
     description:
@@ -532,6 +564,16 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+<<<<<<< HEAD
+=======
+  source_gen:
+    dependency: transitive
+    description:
+      name: source_gen
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.2"
+>>>>>>> developer
   source_span:
     dependency: transitive
     description:

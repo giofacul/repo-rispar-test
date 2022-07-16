@@ -1,6 +1,7 @@
 import 'package:app_rispar/bloc/screens/custom_slider_theme.dart';
 import 'package:app_rispar/bloc/screens/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderShapePercent extends StatefulWidget {
   final ValueChanged<int> onChangedPercent;
@@ -13,7 +14,13 @@ class SliderShapePercent extends StatefulWidget {
 }
 
 class _SliderShapePercentState extends State<SliderShapePercent> {
-  int indexSlider = 0;
+  int indexPercentSlider = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getDataUserToPercent();
+  }
 
   @override
   Widget build(BuildContext context) => CustomSliderTheme(child: buildSlider());
@@ -29,25 +36,16 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Slider(
-          value: indexSlider.toDouble(),
+          value: indexPercentSlider != null
+              ? indexPercentSlider.toDouble()
+              : indexPercentSlider.toDouble(),
           min: min,
           max: max,
           divisions: divisions,
-          label: labels[indexSlider],
+          label: labels[indexPercentSlider],
           onChanged: (value) => setState(() {
-            indexSlider = value.toInt();
-            widget.onChangedPercent(indexSlider);
-            switch (indexSlider) {
-              case 1:
-                widget.onChangedPercent(35);
-                break;
-              case 2:
-                widget.onChangedPercent(50);
-                break;
-              default:
-                widget.onChangedPercent(20);
-                break;
-            }
+            indexPercentSlider = value.toInt();
+            widget.onChangedPercent(indexPercentSlider);
           }),
         ),
         Row(
@@ -57,7 +55,7 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
             (index, model) {
               const selectedColor = Colors.black;
               final unselectedColor = Colors.black.withOpacity(0.3);
-              final isSelected = index <= indexSlider;
+              final isSelected = index <= indexPercentSlider;
               final color = isSelected ? selectedColor : unselectedColor;
 
               return buildLabel(
@@ -85,4 +83,14 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
           ).copyWith(color: color),
         ),
       );
+
+  getDataUserToPercent() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final valuePercentSimulation = prefs.getInt('percentValue') ?? 0;
+
+    setState(() {
+      indexPercentSlider = valuePercentSimulation;
+      print('INDEX RET0RNADO $indexPercentSlider');
+    });
+  }
 }

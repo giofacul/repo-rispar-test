@@ -20,6 +20,8 @@ class _SimulationValueSelectedScreenState
   String? nameUserData;
   String? emailUserData;
   double? valueUserData;
+  int? valueQuantityData;
+  int? valuePercentData;
   SliderShapeQuantity? slider;
   int? sliderQuantity;
   int? sliderPercent;
@@ -50,8 +52,10 @@ class _SimulationValueSelectedScreenState
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
-                      Text(valueUserData != null ?
-                        ' R\$ ${UtilBrasilFields.obterReal(valueUserData!, moeda: false, decimal: 0)}' : 'Vazio',
+                      Text(
+                        valueUserData != null
+                            ? ' R\$ ${UtilBrasilFields.obterReal(valueUserData!, moeda: false, decimal: 0)}'
+                            : 'Vazio',
                         style: TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
@@ -172,8 +176,8 @@ class _SimulationValueSelectedScreenState
   simulationProtectedCollateral(bool protected) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isProtectedValue', protected);
-    prefs.setInt('percentValue', sliderPercent ?? (sliderPercent = 20));
-    prefs.setInt('quantityValue', sliderQuantity ?? (sliderQuantity = 3));
+    prefs.setInt('percentValue', sliderPercent!);
+    prefs.setInt('quantityValue', sliderQuantity!);
     await _navigationToNextPage();
   }
 
@@ -187,9 +191,13 @@ class _SimulationValueSelectedScreenState
   getDataUserToSimulation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final valueSimulation = prefs.getDouble('valueSelected') ?? '';
+    final valueQuantitySimulation = prefs.getInt('quantityValue');
+    final valuePercentSimulation = prefs.getInt('percentValue');
 
     setState(() {
       valueUserData = valueSimulation as double;
+      valueQuantityData = valueQuantitySimulation;
+      valuePercentData = valuePercentSimulation;
     });
   }
 }
