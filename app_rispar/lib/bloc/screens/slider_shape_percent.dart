@@ -1,6 +1,7 @@
 import 'package:app_rispar/bloc/screens/custom_slider_theme.dart';
 import 'package:app_rispar/bloc/screens/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderShapePercent extends StatefulWidget {
   final ValueChanged<int> onChangedPercent;
@@ -14,6 +15,12 @@ class SliderShapePercent extends StatefulWidget {
 
 class _SliderShapePercentState extends State<SliderShapePercent> {
   int indexSlider = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getDataUserToPercent();
+  }
 
   @override
   Widget build(BuildContext context) => CustomSliderTheme(child: buildSlider());
@@ -37,17 +44,17 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
           onChanged: (value) => setState(() {
             indexSlider = value.toInt();
             widget.onChangedPercent(indexSlider);
-            switch (indexSlider) {
-              case 1:
-                widget.onChangedPercent(35);
-                break;
-              case 2:
-                widget.onChangedPercent(50);
-                break;
-              default:
-                widget.onChangedPercent(20);
-                break;
-            }
+            // switch (indexSlider) {
+            //   case 1:
+            //     widget.onChangedPercent(35);
+            //     break;
+            //   case 2:
+            //     widget.onChangedPercent(50);
+            //     break;
+            //   default:
+            //     widget.onChangedPercent(20);
+            //     break;
+            // }
           }),
         ),
         Row(
@@ -85,4 +92,14 @@ class _SliderShapePercentState extends State<SliderShapePercent> {
           ).copyWith(color: color),
         ),
       );
+
+  getDataUserToPercent() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final valueQuantitySimulation = prefs.getInt('quantityValue') ?? 0;
+
+    setState(() {
+      indexSlider = valueQuantitySimulation;
+      print('INDEX RET0RNADO $indexSlider');
+    });
+  }
 }

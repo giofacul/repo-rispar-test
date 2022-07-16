@@ -1,6 +1,7 @@
 import 'package:app_rispar/bloc/screens/custom_slider_theme.dart';
 import 'package:app_rispar/bloc/screens/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderShapeQuantity extends StatefulWidget {
   final ValueChanged<int> onChangedQuantity;
@@ -16,6 +17,12 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
   int indexSlider = 0;
 
   @override
+  void initState() {
+    super.initState();
+    getDataUserToQuantity();
+  }
+
+  @override
   Widget build(BuildContext context) => CustomSliderTheme(child: buildSlider());
 
   Widget buildSlider() {
@@ -28,7 +35,9 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Slider(
-          value: indexSlider.toDouble(),
+          value: indexSlider != null
+              ? indexSlider.toDouble()
+              : indexSlider.toDouble(),
           min: min,
           max: max,
           divisions: divisions,
@@ -36,19 +45,19 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
           onChanged: (value) => setState(() {
             indexSlider = value.toInt();
             widget.onChangedQuantity(indexSlider);
-            switch (indexSlider) {
-              case 1:
-                widget.onChangedQuantity(6);
-                break;
-              case 2:
-                widget.onChangedQuantity(9);
-                break;
-              case 3:
-                widget.onChangedQuantity(12);
-                break;
-              default:
-                widget.onChangedQuantity(3);
-            }
+            // switch (indexSlider) {
+            //   case 1:
+            //     widget.onChangedQuantity(6);
+            //     break;
+            //   case 2:
+            //     widget.onChangedQuantity(9);
+            //     break;
+            //   case 3:
+            //     widget.onChangedQuantity(12);
+            //     break;
+            //   default:
+            //     widget.onChangedQuantity(3);
+            // }
           }),
         ),
         Row(
@@ -58,49 +67,6 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
               final unselectedColor = Colors.black.withOpacity(0.3);
               final isSelected = index <= indexSlider;
               final color = isSelected ? selectedColor : unselectedColor;
-
-// =======
-//     return Scaffold(
-//       backgroundColor: Colors.white,
-//       body: Column(
-//         mainAxisAlignment: MainAxisAlignment.center,
-//         children: [
-//           Slider(
-//             value: indexSlider.toDouble(),
-//             min: min,
-//             max: max,
-//             divisions: divisions,
-//             label: labels[indexSlider],
-//             onChanged: (value) => setState(() {
-//               indexSlider = value.toInt();
-//               widget.onChangedQuantity(indexSlider);
-//
-              // switch (indexSlider) {
-              //   case 1:
-              //     widget.onChangedQuantity(6);
-              //     break;
-              //   case 2:
-              //     widget.onChangedQuantity(9);
-              //     break;
-              //   case 3:
-              //     widget.onChangedQuantity(12);
-              //     break;
-              //   default:
-              //     widget.onChangedQuantity(3);
-              // }
-//             }),
-//           ),
-//           Container(
-//             margin: const EdgeInsets.symmetric(horizontal: 10),
-//             child: Row(
-//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                 children: Utils.modelBuilder(labels, (index, model) {
-//                   const selectedColor = Colors.black;
-//                   final unselectedColor = Colors.black.withOpacity(0.3);
-//                   final isSelected = index <= indexSlider;
-//                   final color = isSelected ? selectedColor : unselectedColor;
-// >>>>>>> developer
-
               return buildLabel(
                   label: model.toString(), color: color, width: 30);
             })),
@@ -124,4 +90,14 @@ class _SliderShapeQuantityState extends State<SliderShapeQuantity> {
           ).copyWith(color: color),
         ),
       );
+
+  getDataUserToQuantity() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final valueQuantitySimulation = prefs.getInt('quantityValue') ?? 0;
+
+    setState(() {
+      indexSlider = valueQuantitySimulation;
+      print('INDEX RET0RNADO $indexSlider');
+    });
+  }
 }

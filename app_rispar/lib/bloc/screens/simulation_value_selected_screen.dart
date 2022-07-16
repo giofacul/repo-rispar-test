@@ -20,6 +20,8 @@ class _SimulationValueSelectedScreenState
   String? nameUserData;
   String? emailUserData;
   double? valueUserData;
+  int? valueQuantityData;
+  int? valuePercentData;
   SliderShapeQuantity? slider;
   int? sliderQuantity;
   int? sliderPercent;
@@ -65,14 +67,14 @@ class _SimulationValueSelectedScreenState
                     children: [
                       FittedBox(
                           child: Row(
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             "Escolha a ",
                             style: TextStyle(fontSize: 14),
                           ),
                           Text(
-                            "quantidade de parcelas",
-                            style: TextStyle(
+                            "quantidade de parcelas $valueQuantityData",
+                            style: const TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -85,13 +87,13 @@ class _SimulationValueSelectedScreenState
                       const SizedBox(height: 10),
                       FittedBox(
                         child: Row(
-                          children: const [
+                          children: [
                             Text(
                               "Escolha o ",
                               style: TextStyle(fontSize: 14),
                             ),
-                            Text(
-                              "percentual de garantia",
+                            Text( valuePercentData != null ?
+                              "percentual de garantia $valuePercentData" : "rgergger",
                               style: TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.bold),
                             ),
@@ -187,9 +189,13 @@ class _SimulationValueSelectedScreenState
   getDataUserToSimulation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final valueSimulation = prefs.getDouble('valueSelected') ?? '';
+    final valueQuantitySimulation = prefs.getInt('quantityValue');
+    final valuePercentSimulation = prefs.getInt('percentValue');
 
     setState(() {
       valueUserData = valueSimulation as double;
+      valueQuantityData = valueQuantitySimulation;
+      valuePercentData = valuePercentSimulation;
     });
   }
 }

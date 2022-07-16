@@ -269,7 +269,6 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
                                   } else if (snapshot.hasError) {
                                     return const Text('ERROU');
                                   }
-
                                   return const CircularProgressIndicator();
                                 },
                               ),
@@ -389,11 +388,38 @@ class _SimulationResultScreenState extends State<SimulationResultScreen> {
   getDataValueSelected() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     double valueSelected = prefs.getDouble('valueSelected') ?? 000.000;
-    int? percentValueSelected = prefs.getInt('percentValue');
-    int? quantityValueSelected = prefs.getInt('quantityValue');
     bool? isWarrantySelected = prefs.getBool('isProtectedValue');
     String? emailValue = prefs.getString('emailUser');
     String? nameValue = prefs.getString('nameUser');
+
+    int? quantityValueGetData = prefs.getInt('quantityValue');
+    int? quantityValueSelected;
+    switch (quantityValueGetData) {
+      case 1:
+        quantityValueSelected = 6;
+        break;
+      case 2:
+        quantityValueSelected = 9;
+        break;
+      case 3:
+        quantityValueSelected = 12;
+        break;
+      default:
+        quantityValueSelected = 3;
+    }
+
+    int? percentValueGetData = prefs.getInt('percentValue');
+    int? percentValueSelected;
+    switch (percentValueGetData) {
+      case 1:
+        percentValueSelected = 35;
+        break;
+      case 2:
+        percentValueSelected = 50;
+        break;
+      default:
+        percentValueSelected = 20;
+    }
 
     var now = DateTime.now();
     var monthDate = DateTime.now().month + 2;
