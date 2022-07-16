@@ -141,11 +141,6 @@ class _SimulationValueSelectedScreenState
                             ),
                             onPressed: () {
                               simulationProtectedCollateral(false);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const LoadingScreen()));
                             },
                           ),
                         ),
@@ -176,8 +171,8 @@ class _SimulationValueSelectedScreenState
   simulationProtectedCollateral(bool protected) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isProtectedValue', protected);
-    prefs.setInt('percentValue', sliderPercent!);
-    prefs.setInt('quantityValue', sliderQuantity!);
+    prefs.setInt('percentValue', sliderPercent ?? 0);
+    prefs.setInt('quantityValue', sliderQuantity ?? 0);
     await _navigationToNextPage();
   }
 
@@ -191,13 +186,19 @@ class _SimulationValueSelectedScreenState
   getDataUserToSimulation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final valueSimulation = prefs.getDouble('valueSelected') ?? '';
-    final valueQuantitySimulation = prefs.getInt('quantityValue');
-    final valuePercentSimulation = prefs.getInt('percentValue');
+    final valueQuantitySimulation = prefs.getInt('quantityValue') ?? 0;
+    final valuePercentSimulation = prefs.getInt('percentValue') ?? 0;
 
     setState(() {
       valueUserData = valueSimulation as double;
       valueQuantityData = valueQuantitySimulation;
       valuePercentData = valuePercentSimulation;
+      if (valueQuantitySimulation != null) {
+        sliderQuantity = valueQuantityData;
+      }
+      if (valuePercentSimulation != null) {
+        sliderPercent = valuePercentData;
+      }
     });
   }
 }
