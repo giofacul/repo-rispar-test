@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:app_rispar/bloc/screens/simulation_result_screen.dart';
 import 'package:app_rispar/bloc/screens/utils/utils_image_rotate.dart';
 import 'package:flutter/material.dart';
@@ -12,12 +11,10 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  AnimationController? animationController;
-
   @override
   void initState() {
-    super.initState();
     startSplashScreenTimer();
+    super.initState();
   }
 
   @override
@@ -30,7 +27,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Theme.of(context).primaryColor),
           onPressed: () => Navigator.of(context).pop(),
-      ),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.close, color: Theme.of(context).primaryColor),
@@ -38,47 +35,45 @@ class _LoadingScreenState extends State<LoadingScreen> {
           ),
         ],
       ),
-      //TODO TIMER LOADING
       body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 12),
-            child: UtilsImageRotate(),
-          ),
-          Text(
-            "Aguarde um momento",
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(
-            height: 12,
-          ),
-          Text(
-            "Estamos simulando seu pedido de \n crédito Rispar...",
-            style: TextStyle(fontSize: 20),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: UtilsImageRotate(),
+            ),
+            FittedBox(
+              child: Text(
+                "Aguarde um momento",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            FittedBox(
+              child: Text(
+                "Estamos simulando seu pedido de \n crédito Rispar...",
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
-  @override
-  dispose() {
-    animationController?.dispose(); // you need this
-    super.dispose();
-  }
-  startSplashScreenTimer() async{
+  startSplashScreenTimer() async {
     const Duration duration = Duration(seconds: 4);
     return Timer(duration, navigationToNextPage);
   }
 
-  void navigationToNextPage(){
+  void navigationToNextPage() {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => const SimulationResultScreen()));
   }
-
 }
